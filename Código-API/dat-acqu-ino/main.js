@@ -28,10 +28,10 @@ const serial = async (
             // altere!
             // Credenciais do banco de dados
             host: 'localhost',            //Na máquina virtual devo pegar o IP da nova máquina.
-            user: 'RHS', // ReptiHabitatSolution
-            password: '******', // 
+            user: 'sptech', // ReptiHabitatSolution
+            password: 'sada1613', // 
             database: 'ReptiHabitatSolutions',
-            port: 3307
+            port: 3306
         }
     ).promise();
 
@@ -56,27 +56,36 @@ const serial = async (
     });
 
     // Processa os dados recebidos do Arduino
-    arduino.pipe(new serialport.ReadlineParser({ delimiter: '\r\n' })).on('data', async (data) => { 
+    arduino.pipe(new serialport.ReadlineParser({ delimiter: '\r\n' })).on('data', async (data) => {
         //console.log(data); 
-        const valores = data.split(';');                         
+        const valores = data.split(';');
         const lm35Temperatura = parseFloat(valores[0]);     // 0 é a porta de leitura
         const luminosidade = parseInt(valores[1]);         // paseFloat - decimal
 
         // Armazena os valores dos sensores nos arrays correspondentes
         valoresLm35Temperatura.push(lm35Temperatura);
-        valoresLuminosidade.push(luminosidade); 
-
+        valoresLuminosidade.push(luminosidade);
+        var fkHabitat = 1;
         // Insere os dados no banco de dados (se habilitado)
         if (HABILITAR_OPERACAO_INSERIR) {
-                // altere!
-                // Este insert irá inserir os dados na tabela "leitura"
-                await poolBancoDados.execute( //ALTERAR PARA NOME DA MINHA TABELA
-                'INSERT INTO Leituras (LeituraLumi, LeituraTemp) VALUES (?, ?)', 
-                [luminosidade, lm35Temperatura] // TROCAR O "?" PELOS VALORES EM AZUL AQUI <<
-            );
+
+            // altere!
+            // Este insert irá inserir os dados na tabela "leitura"
+            await poolBancoDados.execute( //ALTERAR PARA NOME DA MINHA TABELA
+                'INSERT INTO Medidas (LeituraLumi, LeituraTemp, fkHabitat, DataLeitura) VALUES (?, ?, ?, NOW())',
+            [luminosidade, lm35Temperatura, fkHabitat]
+        ); // TROCAR O "?" PELOS VALORES EM AZUL AQUI <<
+        
+
+           
+        
+            
+
             console.log("valores inseridos no banco: ", lm35Temperatura + ", " + luminosidade)
         }
-        
+      
+          
+
     });
 
     // Evento para lidar com erros na comunicação serial
