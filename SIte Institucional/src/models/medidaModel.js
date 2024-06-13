@@ -103,12 +103,6 @@ function indicadores(empresa, habitat) {
          ORDER BY ha.idHabitat DESC
          LIMIT 2
      ) AS subquery) AS ultimo2_alertaID;
-
-
-
-
-
-
 `;
 
 
@@ -145,7 +139,7 @@ function buscarMedidasEmTempoReal(idAquario) {
     return database.executar(instrucaoSql);
 }
 
-function buscarResultadoGraficoBar(empresa) {
+function buscarResultadoGraficoBar() {
     var instrucaoSql = `
     SELECT 
         AVG(CASE WHEN LeituraTemp < 22 THEN LeituraTemp END) AS MediaAbaixo22,
@@ -176,6 +170,64 @@ function buscarResultadoGraficoBarLumin(empresa) {
     console.log("Executando a instrução SQL: \n" + instrucaoSql);
     return database.executar(instrucaoSql);
 }
+
+function buscarResultadoGraficoPie() {
+    var instrucaoSql = `
+    SELECT 
+        AVG(CASE WHEN LeituraTemp < 22 THEN LeituraTemp END) AS MediaAbaixo22,
+        AVG(CASE WHEN LeituraTemp >= 22 AND LeituraTemp <= 29 THEN LeituraTemp END) AS MediaEntre22e29,
+        AVG(CASE WHEN LeituraTemp > 29 THEN LeituraTemp END) AS MediaAcima29
+    FROM (
+        SELECT 
+            MONTH(DataLeitura) AS Mes,
+            LeituraTemp
+        FROM Medidas
+        JOIN Leituras ON Medidas.fkLeituras = Leituras.id
+        WHERE MONTH(DataLeitura) BETWEEN 1 AND 6
+    ) AS TempMes
+    GROUP BY Mes
+    ORDER BY Mes;
+                    `;
+
+    console.log("Executando a instrução SQL: \n" + instrucaoSql);
+    return database.executar(instrucaoSql);
+}
+function buscarResultadoGraficoBarLumin(empresa) {
+    var instrucaoSql = `
+   
+    SELECT AVG(l.LeituraTemp) AS MediaTemperatura
+    FROM Leituras l;
+                    `;
+
+    console.log("Executando a instrução SQL: \n" + instrucaoSql);
+    return database.executar(instrucaoSql);
+}
+function buscarResultadoGraficoLineTemp(empresa) {
+    var instrucaoSql = `
+   
+    SELECT AVG(l.LeituraTemp) AS MediaTemperatura
+    FROM Leituras l;
+                    `;
+
+    console.log("Executando a instrução SQL: \n" + instrucaoSql);
+    return database.executar(instrucaoSql);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 function alertas(empresa, habitat) {
 
     var instrucaoSql = `
@@ -200,6 +252,8 @@ module.exports = {
     buscarMedidasEmTempoReal,
     indicadores,
     buscarResultadoGraficoBar,
+    buscarResultadoGraficoPie,
     buscarResultadoGraficoBarLumin,
+    buscarResultadoGraficoLineTemp,
     alertas
 }

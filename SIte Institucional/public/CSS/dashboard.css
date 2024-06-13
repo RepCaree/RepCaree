@@ -111,18 +111,19 @@ margin-top: 9px;
   width: 80%;
   left: 20%;
   height: 100vh;
-  position: absolute;
+  position: relative;
+  bottom: 40px;
 }
 .tituloDash{
   display: flex;
   justify-content: center;
-  margin: 10px;
+  margin-top: 20px;
 }
 .div_graficos{
   display: flex;
   align-items: center;
   flex-direction: column;
-  margin-top: 20px;
+  margin-top: 12px;
   gap: 15px;
   width: 100%;
 }
@@ -133,7 +134,7 @@ justify-content: center;
 flex-direction: column;
 font-size: 17px;
 width: 500px;
-height: 325px;
+height: 323px;
 background-color: #e7e5e5;
 border-radius: 10px;
 }
@@ -274,17 +275,17 @@ color: #548D3D;
 .div_filtro{
   overflow-y: auto;
   width: 300px;
-  height: 82vh;
+  height: 84.5vh;
   border-radius: 0px 0px 10px 10px;
   background-color: #e7e5e5;
   position: relative;
   left: 73%;
-  bottom:87%;
+  bottom:90%;
 }
 /*  SEARCH  */
 .search {
   left: 73%;
-  bottom:87%;
+  bottom:89%;
   position: relative;
   position: relative;
   display: flex;
@@ -351,7 +352,7 @@ input[type="search"]::-webkit-search-cancel-button:after {
   color: #0f7826;
 }
 .KPIhabi{
-  margin-top: 20px;
+  margin-top: 55px;
   width: 300px;
   height: 150px;
   border-radius: 10px;
