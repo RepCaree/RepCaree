@@ -19,7 +19,13 @@ router.post("/alertas", function (req, res) {
 router.get("/buscarResultadoGraficoBar/:fk_empresa", function (req, res) {
     medidaController.buscarResultadoGraficoBar(req, res);
 });
+router.get("/buscarResultadoGraficoPie/:fk_empresa", function (req, res) {
+    medidaController.buscarResultadoGraficoPie(req, res);
+});
 router.get("/buscarResultadoGraficoBarLumin/:fk_empresa", function (req, res) {
     medidaController.buscarResultadoGraficoBarLumin(req, res);
+});
+router.get("/buscarResultadoGraficoLineTemp/:fk_empresa", function (req, res) {
+    medidaController.buscarResultadoGraficoLineTemp(req, res);
 });
 module.exports = router;
