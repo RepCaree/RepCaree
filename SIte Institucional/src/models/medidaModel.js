@@ -142,24 +142,35 @@ function buscarMedidasEmTempoReal(idAquario) {
 function buscarResultadoGraficoBar() {
     var instrucaoSql = `
     SELECT 
-        AVG(CASE WHEN LeituraTemp < 22 THEN LeituraTemp END) AS MediaAbaixo22,
-        AVG(CASE WHEN LeituraTemp >= 22 AND LeituraTemp <= 29 THEN LeituraTemp END) AS MediaEntre22e29,
-        AVG(CASE WHEN LeituraTemp > 29 THEN LeituraTemp END) AS MediaAcima29
-    FROM (
-        SELECT 
-            MONTH(DataLeitura) AS Mes,
-            LeituraTemp
-        FROM Medidas
-        JOIN Leituras ON Medidas.fkLeituras = Leituras.id
-        WHERE MONTH(DataLeitura) BETWEEN 1 AND 6
-    ) AS TempMes
-    GROUP BY Mes
-    ORDER BY Mes;
+    h.idHabitat,
+    h.especieRepteis,
+    h.qtdRepteis,
+    h.areaHabitat,
+    e.logradouro,
+    e.numero,
+    e.complemento,
+    e.bairro,
+    e.cidade,
+    m.LeituraTemp,
+    CASE
+        WHEN m.LeituraTemp < 22 THEN 'Abaixo da Média'
+        WHEN m.LeituraTemp BETWEEN 22 AND 29 THEN 'Na Média'
+        WHEN m.LeituraTemp > 29 THEN 'Acima da Média'
+    END AS ClassificacaoTemperatura
+FROM 
+    habitatAnimal h
+JOIN 
+    endereco e ON h.fkEndereco = e.idEndereco
+JOIN 
+    Medidas m ON h.idHabitat = m.fkHabitat
+ORDER BY 
+    ClassificacaoTemperatura, h.idHabitat;
                     `;
 
     console.log("Executando a instrução SQL: \n" + instrucaoSql);
     return database.executar(instrucaoSql);
 }
+
 function buscarResultadoGraficoBarLumin(empresa) {
     var instrucaoSql = `
    
@@ -192,6 +203,7 @@ function buscarResultadoGraficoPie() {
     console.log("Executando a instrução SQL: \n" + instrucaoSql);
     return database.executar(instrucaoSql);
 }
+
 function buscarResultadoGraficoBarLumin(empresa) {
     var instrucaoSql = `
    
@@ -202,6 +214,7 @@ function buscarResultadoGraficoBarLumin(empresa) {
     console.log("Executando a instrução SQL: \n" + instrucaoSql);
     return database.executar(instrucaoSql);
 }
+
 function buscarResultadoGraficoLineTemp(empresa) {
     var instrucaoSql = `
    
@@ -212,21 +225,6 @@ function buscarResultadoGraficoLineTemp(empresa) {
     console.log("Executando a instrução SQL: \n" + instrucaoSql);
     return database.executar(instrucaoSql);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 function alertas(empresa, habitat) {
 

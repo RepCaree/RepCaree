@@ -59,7 +59,7 @@ CREATE TABLE habitatAnimal (
 
 -- Criação da tabela 'Leituras":
 CREATE TABLE Leituras(
-  id INT NOT NULL,
+  id INT NOT NULL auto_increment,
   LeituraLumi DECIMAL(5,2) NULL,
   LeituraTemp DECIMAL(5,2) NULL,
   PRIMARY KEY (id));

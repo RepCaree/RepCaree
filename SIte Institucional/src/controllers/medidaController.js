@@ -88,7 +88,6 @@ function buscarResultadoGraficoBar(req, res) {
     });
 }
 
-
 function buscarResultadoGraficoPie(req, res) {
 
     var empresa = req.params.fk_empresa;
@@ -108,24 +107,6 @@ function buscarResultadoGraficoPie(req, res) {
     });
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 function buscarResultadoGraficoBarLumin(req, res) {
 
     var empresa = req.params.fk_empresa;
@@ -144,6 +125,7 @@ function buscarResultadoGraficoBarLumin(req, res) {
         res.status(500).json(erro.sqlMessage);
     });
 }
+
 function buscarResultadoGraficoLineTemp(req, res) {
 
     var empresa = req.params.fk_empresa;

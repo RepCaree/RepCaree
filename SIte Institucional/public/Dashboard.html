@@ -12,7 +12,6 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
   <script src="http://www.chartjs.org/dist/2.7.1/Chart.js"></script>
   <script src="http://www.chartjs.org/samples/latest/utils.js"></script>
-  <script src="./js/sessao.js"></script>
   <script src="./js/alerta2.js"></script>
   <style>
     canvas {
@@ -299,46 +298,6 @@
       });
   }
 
-
-
-  // const contextoLm35Temperatura = document
-  //   .getElementById("luminosidade")
-  //   .getContext("2d");
-
-  // var lm35Temperatura = new Chart(contextoLm35Temperatura, {
-  //   type: "pie",
-  //   data: {
-  //     labels: [
-  //       "Abaixo da média",
-  //       "Na média",
-  //       "Acima da média"
-  //     ],
-  //     datasets: [
-  //       {
-  //         label: "Luminosidade",
-  //         data: [1, 18, 1],
-  //         borderwidht: 1,
-  //         backgroundColor: ["#75b9d7", "#ffd166", "#ff4d4d"],
-  //         borderColor: ["#75b9d7", "#ffd166", "#ff4d4d"]
-  //       },
-  //     ],
-  //   },
-  //   options: {
-  //     scales: {
-  //       xAxes: [
-  
-  //       ],
-  //       yAxes: [
-
-  //       ],
-  //     },
-  //     animation: {
-  //       duration: 0,
-  //     },
-  //   },
-  // });
-
-
   const barraDePesquisa = document.querySelector("input"); //<input/>
   const lista = document.querySelector("ul"); //<ul></ul>
   const itens = document.querySelectorAll("li"); //<li><li/>
@@ -375,53 +334,8 @@
       .getElementById("lm35TemperaturaHabi")
       .getContext("2d");
 
-  //   var lm35Temperatura = new Chart(contextoLm35Temperatura, {
-  //     type: "line",
-  //     data: {
-  //       labels: ['13H', '14H', '15H', '16H', '17H', '18H'],
-  //       datasets: [{
-  //         label: 'Temperatura',
-  //         data: [22, 29, 21, 24, 14, 23, 31],
-  //         borderwidht: 1,
-  //         fill: false,
-  //         tension: 0.1,
-  //         pointStyle: 'circle',
-  //         backgroundColor: '#ffd166',
-  //         borderColor: '#ffd166'
-  //       },
-  //       ],
-  //     },
-  //     options: {
-  //       scales: {
-  //         xAxes: [
-  //           {
-  //             distribution: "series",
-  //             ticks: {
-  //               beginAtZero: true,
-  //             },
-  //           },
-  //         ],
-  //         yAxes: [
-  //           {
-  //             scaleLabel: {
-  //               display: true,
-  //               labelString: "Temperatura",
-  //             },
-  //             ticks: {
-  //               beginAtZero: true,
-  //             },
-  //           },
-  //         ],
-  //       },
-  //       animation: {
-  //         duration: 0,
-  //       },
-  //     },
-  //   });
-
   }
     
-  
   let graficoBar;
   function obterDadosGraficoBar() {
     fetch(`/medidas/buscarResultadoGraficoBar/${sessionStorage.FK_EMPRESA}`, {
@@ -528,13 +442,6 @@
 
   obterDadosGraficoBar();
   setInterval(obterDadosGraficoBar, 100000);
-
-
-
-
-
-
-
 
   let graficoPie;
   function obterDadosGraficoPie() {
@@ -643,32 +550,7 @@
   obterDadosGraficoPie();
   setInterval(obterDadosGraficoPie, 100000);
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+  //Graficos do habitat filtrado
   let graficoBarLuminVariacao;
     function obterDadosGraficoBarLuminHabi() {
       var fk_empresa = sessionStorage.FK_EMPRESA;
@@ -752,7 +634,6 @@
     obterDadosGraficoBarLuminHabi();
     setInterval(obterDadosGraficoBarLuminHabi, 5000);
 
-
     let graficoLineTempVariacao;
     function obterDadosGraficoLineTempHabi() {
       var fk_empresa = sessionStorage.FK_EMPRESA;
@@ -831,8 +712,6 @@
         }
       });
     }
-
-
     obterDadosGraficoLineTempHabi();
     setInterval(obterDadosGraficoLineTempHabi, 5000);
 
