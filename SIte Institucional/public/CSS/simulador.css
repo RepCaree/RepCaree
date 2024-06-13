@@ -1,37 +1,219 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100;300;600&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100;300;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap');
 
+/*
+#01493A Verde escuro
+#498C58 Verde Claro
+#ffDE84 Cor Soja
+#77BD1F Cor verde(igual o logo)
+*/
 
-body {
-    font-family: 'Montserrat', sans-serif;
+/* Toda a página fica com margem = 0, e com a fonte estilo poppins */
+* {
     margin: 0;
-    background-color: #c0d2c9;
-    min-height: 100vh;
-    overflow: hidden;
+    font-family: 'poppins', sans-serif;
+    font-family: 'Poppins';
 }
 
-body:before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(164deg, #036753 24%, #0c8e39 91%);
-    clip-path: circle(30% at right 70%);
+/* Define a cor do que é digitado como branco */
+input {
+    color: #ffffff;
 }
 
-body::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
+/*
+VERDE ESCURO: #4B5E46
+VERDE: #73916C 
+VERDE CLARO: #B5E4AA
+*/
+
+/* Detalhes sobre o corpo da página */
+body {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #B5E4AA70;
+}
+
+/* Container que contém todo o conteúdo */
+.containerMae {
+    display: flex;
+    flex-direction: column;
+
+}
+
+/* Destalhes do titulo "CALCULE SEU PREJUÍZO" */
+.title {
+    font-size: 50px;
+    color: #01493A;
+    text-align: center;
+    font-weight: 900;
     width: 100%;
-    height: 100%;
-    background: #036753;
-    background: linear-gradient(164deg, #0c8e39 5%, #036753 98%);
-    clip-path: circle(20% at 10% 10%);
-    z-index: -1;
+    justify-content: center;
+    display: flex;
+    align-items: center;
+}
+
+/* Detalhes sobre o logo 7Sojas */
+.logo {
+    width: 10vw;
+    display: flex;
+    align-items: center;
+    margin-left: 80px;
+}
+
+/* Container geral, contém os outros 2 containers(esquerdo e direito) */
+.containerFilhos {
+    /* background-color: #2C5819; */
+    background-color: #01493A;
+    border-radius: 10px;
+    /* Arredonda a borda em 15px */
+    padding: 15px;
+    /* Distãncia da bordao conteudo dentro */
+    width: 70rem;
+    display: flex;
+    color: #FFFFFF;
+    height: 520px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/*(container esquerdo) Container das inputs botão*/
+.containerFilho1 {
+    border-radius: 10px;
+    padding: 10px;
+    width: 300px;
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
+/* (container direito) Container onde aparece a foto(antes de clicar no botão) e a resposta(após clicar no botão)*/
+.containerFilho2 {
+    border-radius: 10px;
+    padding: 20px;
+    /* Distãncia da bordao conteudo dentro */
+    width: 660px;
+    height: 450px;
+    display: flex;
+    align-items: center;
+    /* justify-content: center; */
+    flex-direction: column;
+    background-color: #B5E4AAA8;
+    margin-left: 50px;
+
+}
+
+/* Aplica 20px de margem na parte de baixo */
+.conteudo {
+    margin-bottom: 20px;
+}
+
+/* Detalhes sobre as inputs */
+.conteudo input {
+    background-color: transparent;
+    border: none;
+    border-bottom: 1px solid #73916C;
+    /* Estiliza somente a borda inferior para que fique como uma linha */
+    width: 90%;
+    padding: 10px;
+    font-size: 16px;
+    outline: none;
+    /* Define que não terá borda na input */
+}
+
+/* Detalhes sobre a estilização do botão */
+.btn {
+    display: flex;
+    justify-content: center;
+}
+
+.btn button{
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    /* background-color: #77BD1F; */
+    background-color: #B5E4AAA8;
+    width: 16rem;
+    color: white;
+    border: none;
+    padding: 15px;
+    margin-top: -8px;
+    /* margin-bottom: -30px; */
+    /* Distãncia da borda do botão para o que esta escrito nele */
+    border-radius: 16px;
+    /* Arredonda a borda em 16px */
+    font-weight: 900;
+    /* Torna a grossura da fonte em bold 900 */
+    font-size: 14px;
+}
+
+.btn button:hover {
+    background-color: #B5E4AA;
+    color: #4B5E46;
+    transition: all 0.5s;
+    cursor: pointer;
+}
+
+
+/* Detalhes sobre as dimensões da imagem no containerFilho2 */
+/* #imagem {
+    height: 300px;
+    width: 300px;
+} */
+
+/* Fução que faz a imagem ficar escondida */
+.hidden {
+    display: none;
+}
+
+/* Função que torna o resultado branco */
+.result {
+    color: #ffffff;
+}
+
+.question select {
+    background-color: #B5E4AAA8;
+    border-radius: 3rem;
+    width: 280px;
+    height: 2rem;
+    color: #01493A;
+    text-align: center;
+    font-size: 18px;
+    outline: none;
+    margin-top: 10px;
+    cursor: pointer;
+}
+
+.question {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 20px;
+    text-align: center;
+}
+
+.conteudo input:not(:placeholder-shown) {
+    background-color: #B5E4AAA8;
+    transition: all 0.3s;
+    border-radius: 5rem;
+}
+
+.checkselect {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    justify-content: center;
+    margin-top: 5px;
+    gap: 1rem;
+}
+
+
+.checkselect label {
+    margin-left: -12px;
+    margin-top: 4px;
+}
+
+.checkselect input {
+    width: 18px;
 }
 
 .img_seta {
@@ -39,214 +221,54 @@ body::after {
     width: 75px;
     cursor: pointer;
     position: relative;
-    top: 45px;
-    left: 15px;
+    bottom: 340px;
+    right: 210px;
+    filter: invert();
+    
+} 
+
+.logoGrande {
+    margin-top: 20px;
+    border-radius: 215px;
 }
 
-.frente .titulo {
-    width: 50px;
-    color: #0c933b;
-    font-weight: 900;
-    font-size: 30px;
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
-    margin-left: 5px;
-}
-
-.frente h1 {
-    color: #ebebeb;
-    font-weight: 900;
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
-    margin-bottom: 26px;
-
-}
-
-.tela_calculadora {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 12%;
-    perspective: 1000px;
-}
-
-.container {
-    background: #036753;
-    color: white;
-    border-color: black;
-    border-radius: 15px;
-    box-shadow: 20px 20px 50px rgba(0, 0, 0, 0.5);
-    padding: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    max-width: 1500px;
-    max-height: 10hv;
-    margin: 30px;
-    padding: 10px;
-    position: relative;
-    transform-style: preserve-3d;
-    transition: transform 1s ease;
-    bottom: 270px;
-    left: 40px;
-   
-
-}
-
-.container.flip {
-   padding: 30px;
-    min-width: 1330px;
-    height: 610px;
-    transform: rotateY(180deg);
-}
-
-.frente .verso {
+/* Estilos para o modal */
+.modal {
+    display: none; /* Esconde o modal por padrão */
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
     width: 100%;
     height: 100%;
-    position: absolute;
-    backface-visibility: hidden;
-}
-
-.frente {
-    font-size: 14px;
-    line-height: 20px;
-    letter-spacing: 0.5px;
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-}
-
-.frente input {
-    width: 190px;
-    border: none;
-    border-radius: 15px;
-    background-color: #ecf0f1;
-}
-
-.frente .lamp {
-    height: 20px;
-    width: 10%;
-    border: none;
-    margin: 2px;
-}
-
-.select_lampadas {
-    width: 207px;
-    height: 40px;
-    border: none;
-    border-radius: 15px;
-    padding: 10px;
-    appearance: none;
-    background-color: #ecf0f1;
-    margin-top: 12px;
-    outline: 0;
-    cursor: pointer;
-}
-
-.iluminacoes select {
-    display: flex;
-    padding-left: 89px;
-}
-
-#botao {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.question {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    text-align: center;
-    margin-bottom: 5px;
-}
-
-.question input {
-    font-size: 14px;
-    font-weight: 190;
-    line-height: 20px;
-    letter-spacing: 0.5px;
-    outline: 0;
-    padding: 10px 10px;
-    margin-top: 12px;
-    text-align: center;
-
-}
-
-.option_lampadas {
-    font-size: 12px;
-    display: flex;
-}
-
-.checkselect {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-}
-
-button {
-    border-radius: 18px;
-    border: 1px solid #036753;
-    background: whit;
-    font-weight: bold;
-    padding: 13px 42px;
-    letter-spacing: 1PX;
-    text-transform: uppercase;
-    transition: 580ms ease-in;
-    color: #0c8e39;
-    cursor: pointer;
-    margin-top: 5px;
-    margin-left: 10px;
-}
-
-button:hover {
-    transition: all 580ms ease-in-out;
-    box-shadow: 4px 4px 4px 2px rgba(0, 0, 0, 0.5);
-    background: #0c8e39;
-    color: white;
-}
-
-.imagem_repteis {
-    width: 300px;
-    height: 450px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-}
-
-.imagem_repteis img {
-    background-size: cover;
-    width: 80%;
-    filter: invert(88%);
-    margin-left: 48px;
-}
-
-.verso {
-    display: flex;
-    width: auto;
-    height: 100%;
-    transform: rotateY(180deg);
-    object-fit: fill;
     overflow: auto;
+    background-color: #000000;
+    background-color: #00000066;
+    cursor: pointer;
 }
 
-.verso .resposta {
-    display: block;
-    text-align: justify;
-    font-size: 15px;
-    padding-right: 20px;
+/* Conteúdo do modal */
+.modal-content {
+    background-color: #FEFEFE;
+    border-radius: 10px;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 30%;
 }
 
-.verso button {
-    /* margin-bottom: 25px; */
-    margin-top: 15px;
+/* Botão de fechar */
+.close {
+    color: #01493A;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    margin-bottom: 10px;
 }
 
-.mensagem_erro {
-    font-size: 12px;
-    width: 60%;
-    text-align: center;
-    padding-bottom: 15px;
+.close:hover,
+.close:focus {
+    color: red;
+    text-decoration: none;
+    cursor: pointer;
 }

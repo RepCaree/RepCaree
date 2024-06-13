@@ -4,25 +4,44 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RHS | Simulador Financeiro</title>
-    <link rel="stylesheet" href="../public/CSS/simulador.css">
-    <link rel="shortcut icon" href="../public/IMG/icone.ico" type="image/x-icon">
+    <link rel="stylesheet" href="./CSS/simulador.css">
+    <link rel="shortcut icon" href="./IMG/icone.ico" type="image/x-icon">
+    <title>RHS | Simulador</title>
 </head>
 
 <body>
-    <a href="HomePage.html"><img class="img_seta" src="IMG/Simulador/seta-direita.png" alt="setaReturn"></a>
-    <div style="margin-top: 70px; display: block;" id="espacamento">
-
+    <div class="voltar">
+        <a href="index.html"><img class="img_seta" src="IMG/Cadastro/seta-direita.png" alt="" /></a>
     </div>
-    <div class="tela_calculadora">
-        <div class="container" id="tela_calculadora">
-            <div class="frente" id="calculos_inf">
-                <h1> <span class="titulo">SIMULADOR</span> <br> <br>FINANCEIRO</h1>
-                <label class="question" for="qtd_repteis_input">Quantos répteis você possui?<br>
-                    <input type="number" id="qtd_repteis_input">
+    <div class="containerMae">
+        <a href="simulador.html">
+            <h2 class="title" style="cursor: pointer; text-decoration: none;">SIMULADOR FINANCEIRO</h2>
+        </a>
+        <div class="containerFilhos">
+            <!-- Container principal que guarda o container da esquerda(Inputs e botão) e da direita(Resposta) -->
+            <div class="containerFilho1"> <!-- Container da esquerda, contendo Inputs e botão -->
+                <div class="question">
+                    <div class="conteudo">
+                        Quantos répteis você possui?
+                        <input type="number" id="qtd_repteis_input" placeholder="Ex: 7">
+                    </div>
+
+                </div>
+
+                <label class="question" for="">Informe a região:
+                    <div class="regioes">
+                        <select class="select_regiao" id="sistema_region_select">
+                            <option value="vazio">---</option>
+                            <option value="Centro-Oeste">Centro-Oeste</option>
+                            <option value="Nordeste">Nordeste</option>
+                            <option value="Norte">Norte</option>
+                            <option value="Sudeste">Sudeste</option>
+                            <option value="sul_value">Sul</option>
+                        </select>
+                    </div>
                 </label>
                 <br>
-                <label class="question" for="">Você possui um sistema <br>de iluminação?
+                <label class="question" for="">Você possui um sistema de iluminação?
                     <div class="iluminacoes">
                         <select class="select_lampadas" onchange='mostrarLampadas()' id="sistema_iluminacao_select">
                             <option value="vazio">---</option>
@@ -32,34 +51,50 @@
                     </div>
                 </label>
                 <br>
-                <div class="option_lampadas" id="lampadas" style="display: none;">
-                    <span style="display: flex; align-items: center; margin-left: 10px;">Quais lâmpadas você utiliza no habitat?</span>
-                    <div class="checkselect">
-                        <input class="lamp" type="checkbox" id="lampada_uvi">
-                        <label for="lampada_uvi">UVI</label>
-                        <br>
-                        <input class="lamp" type="checkbox" id="lampada_uva">
-                        <label for="lampada_uva"><span href="">UVA</span></label>
-                        <br>
-                        <input class="lamp" type="checkbox" id="lampada_comum">
-                        <label for="lampada_comum">COMUM</label>
+                <div class="question">
+                    <div class="option_lampadas" id="lampadas" style="display: none;">
+                        <span style="display: flex; align-items: center; margin-left: 10px;">Quais lâmpadas você utiliza
+                            no
+                            habitat?</span>
+                        <div class="checkselect">
+                            <input class="lamp" type="checkbox" id="UVA">
+                            <label for="UVA">UVA</label>
+                            <br>
+                            <input class="lamp" type="checkbox" id="UVB">
+                            <label for="UVB">UVB</label>
+                            <br>
+                            <input class="lamp" type="checkbox" id="COMUM">
+                            <label for="COMUM">COMUM</label>
+                        </div>
                     </div>
                 </div>
                 <br>
-                <button id="botao" onclick="calcularPreju()">Calcular Prejuízo</button><br>
-                <div id="error" class="mensagem_erro"></div>
+                <div class="btn">
+                    <button onclick="calcularPreju()">CALCULAR PREJUÍZO</button>
+                </div>
+
+                <div id="error" style="display: none;"></div>
+                <button id="btn_Voltar" onclick="voltarCalculadora()" style="display: none;"> Voltar </button>
             </div>
-            <div class="verso" id="resposta_calculadora" style="display: none">
-                <div class="resposta" id="show"></div>
-                <button onclick="voltarCalculadora()"> Voltar </button>
-            </div>
-            <div id="img_rep" class="imagem_repteis">
-                <img src="../public/IMG/Simulador/repteis.png" alt="dino" >
+            <div class="containerFilho2">
+                <!-- Container da direita, contém a imagem até que o cliente clique no botão, ao clicar, a imagem é oculta e aparece a resposta -->
+                <!-- div que será puxada pelo innerHTML, para que apareça a resposta -->
+                <div id="mensagemResultado">
+                    <img src="./IMG/Home_fundo/logoRHS.png" class="logoGrande" id="img_rep">
+                    <!-- Imagem antes do cliente clicar no botão -->
+                </div>
             </div>
         </div>
-    </body>
-</html>
+        <div id="myModal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <p>Conteúdo do modal</p>
+            </div>
+        </div>
+    </div>
+</body>
 
+</html>
 <script>
     function mostrarLampadas() {
         let selecao = sistema_iluminacao_select.value
@@ -70,41 +105,58 @@
         }
     }
 
-
     function calcularPreju() {
-        espacamento.style.display = "none"
         let qtd_Repteis = Number(qtd_repteis_input.value)
+        let selecaoRegiao = sistema_region_select.value
         let selecao = sistema_iluminacao_select.value
-        let uvaCheck = lampada_uvi.checked
-        let uvbCheck = lampada_uva.checked
-        let comumCheck = lampada_comum.checked
+        let uvaCheck = UVA.checked
+        let uvbCheck = UVB.checked
+        let comumCheck = COMUM.checked
         let valorLampadas = 0
         let qtdLampadas = 0
 
-        if (qtd_Repteis == " ") {
+        if (qtd_Repteis == '') {
+            // em caso de alert:
+            alert("Insira a quantidade de répteis")
+
+            // em caso de inner:
             error.style.display = 'block'
-            error.innerHTML = `Nenhum campo pode estar vazio, insira um valor.`
+            error.innerHTML = `Insira a quantidade de répteis.`
             setTimeout(function () {
                 error.style.display = 'none'
             }, 2500);
-        } else if (selecao === "vazio") {
+        } else if (selecaoRegiao == 'vazio') {
+            // em caso de alert:
+            alert("Informe uma região")
+
+            // em caso de inner:
             error.style.display = 'block'
-            error.innerHTML = `Informe se possui ou não um sistema de iluminação para poder prosseguir`
+            error.innerHTML = `Informe uma região.`
             setTimeout(function () {
                 error.style.display = 'none'
             }, 2500);
-        } else if (selecao === "yes" && uvaCheck === false && uvbCheck === false && comumCheck === false) {
+
+        } else if (selecao == 'vazio') {
+            // em caso de alert:
+            alert("Selecione uma opção de iluminação")
+
+            // em caso de inner:
             error.style.display = 'block'
-            error.innerHTML = "Por favor, selecione pelo menos uma checkbox."
+            error.innerHTML = `Selecione uma opção de iluminação`
+            setTimeout(function () {
+                error.style.display = 'none'
+            }, 2500);
+        } else if (selecao == 'yes' && uvaCheck === false && uvbCheck === false && comumCheck === false) {
+            // em caso de alert:
+            alert("Selecione uma lâmpada")
+
+            // em caso de inner:
+            error.style.display = 'block'
+            error.innerHTML = `Selecione uma lâmpada`
             setTimeout(function () {
                 error.style.display = 'none'
             }, 2500);
         } else {
-            img_rep.style.display = 'none'
-            calculos_inf.style.display = 'none'
-            resposta_calculadora.style.display = 'block'
-            let cards = document.querySelector('.container');
-            cards.classList.toggle('flip');
             if (selecao === "yes") {
                 if (uvaCheck === true) {
                     valorLampadas += 300
@@ -118,54 +170,111 @@
                     valorLampadas += 50
                     qtdLampadas += 3
                 }
-                show.style.display = 'block'
-                show.innerHTML = `
-                <h3> Habitat Solutions: Seu Parceiro para Ambientes Ideais para Répteis</h3>
-                <h4>Na Habitat Solutions, garantimos a você: </h4>
 
-                <h5> Análise Personalizada de Temperatura e Luminosidade </h5>
-                Com a escolha do nosso serviço, você terá uma <i style= "color: #ffa700;fon;font-family: sans-serif;font-size: 16px;""> análise detalhada da temperatura e luminosidade ideais para o habitat do seu réptil, considerando as necessidades específicas de cada espécie.</i> Entendemos que répteis são extremamente sensíveis às condições ambientais e que qualquer variação pode impactar diretamente sua saúde e bem-estar. 
+                mensagemResultado.style.display = 'block'
+                mensagemResultado.innerHTML = `<p style= "font-size: 21px; color:#292828">
+                A região selecionada é <b>${selecaoRegiao}</b>, onde sua média de temperatura varia de <span  style= "color: red;font-weight: bold;font-family: sans-serif;font-size: 30px;text-shadow: 2px 2px black;" id="mediaRegiao"></a></span>
+                <br><br>
+                <b>Situação</b>: <a id="tipoLampada"></a>
+                <br>
+                <br>
+                <u>Sem um sistema de monitoramento adequado</u>, a saúde e segurança do seu réptil é comprometida, resultando em um <u>gasto anual</u> de cerca de <i style= "color: red;font-weight: bold;font-family: sans-serif;font-size: 30px;text-shadow: 2px 2px black;"><b>R$ ${(valorLampadas * qtdLampadas) * qtd_Repteis}</b></i> em lâmpadas, além de um significativo desperdício de recursos. </p> <br>`
 
-                <h5> Qualidade na Solução Completa </h5>
-                A qualidade da nossa solução não se resume apenas na instalação de sensores. Nosso serviço inclui a <i style= "color: #ffa700;fon;font-family: sans-serif;font-size: 16px;""> escolha precisa do tipo de lâmpada dentro do habitat, considerando a presença de luzes UV, UVA e UVB, que podem elevar a temperatura de maneira diferente para cada espécie. </i> Estudos mostram que a exposição correta a essas luzes é crucial para processos biológicos importantes, como a síntese de vitamina D3 e o comportamento termorregulador.
+                if (selecaoRegiao === "Centro-Oeste") {
+                    mediaRegiao.innerHTML = "21°C a 27°C"
+                } else if (selecaoRegiao === "Nordeste") {
+                    mediaRegiao.innerHTML = "27°C a 34°C"
+                } else if (selecaoRegiao === "Norte") {
+                    mediaRegiao.innerHTML = "25°C a 28°C"
+                } else if (selecaoRegiao === "Sudeste") {
+                    mediaRegiao.innerHTML = "18°C a 24°C"
+                } else if (selecaoRegiao === "Sul") {
+                    mediaRegiao.innerHTML = "15°C a 21°C"
+                }
 
-                <h5> Monitoramento Preciso </h5>
-                <i style= "color: #ffa700;fon;font-family: sans-serif;font-size: 16px;"">Utilizamos um monitoramento contínuo da temperatura, garantindo uma análise precisa da variação conforme as lâmpadas instaladas. </i> Nossa abordagem holística assegura que todas as condições  ambientais sejam controladas, proporcionando um habitat saudável e estável.
+                if (uvaCheck === true & uvbCheck === true & comumCheck === true) {
+                    tipoLampada.innerHTML = "É recomendável que utilize um <u>sistema de monitoramento</u>."
+                } else if (uvaCheck === true & uvbCheck === true) {
+                    tipoLampada.innerHTML = "É necessário que também seja utilizado lâmpada <b>comum</b>. "
+                } else if (uvaCheck === true & comumCheck === true) {
+                    tipoLampada.innerHTML = "É necessário que também seja utilizado lâmpada <b>UVB</b>. "
+                } else if (uvbCheck === true & comumCheck === true) {
+                    tipoLampada.innerHTML = "É necessário que também seja utilizado lâmpada <b>UVA</b>. "
+                } else if (uvaCheck === true) {
+                    tipoLampada.innerHTML = "É necessário que também seja utilizado lâmpadas <b>UVB</b> e <b>comum</b>. "
+                } else if (uvbCheck === true) {
+                    tipoLampada.innerHTML = "É necessário que também seja utilizado lâmpadas <b>UVA</b> e <b>comum</b>. "
+                } else if (comumCheck === true) {
+                    tipoLampada.innerHTML = "É necessário que também seja utilizado lâmpadas <b>UVA</b> e <b>UVB</b>. "
+                }
 
-                <h5> Benefícios Adicionais </h5>
-                Nosso serviço visa não apenas criar um ambiente ideal, mas também <i style= "color: #ffa700;fon;font-family: sans-serif;font-size: 16px;""> reduzir os custos de manutenção e a necessidade de intervenções veterinárias </i> decorrentes de problemas associados à má qualidade de temperatura e luminosidade. Um ambiente corretamente balanceado resulta em répteis mais saudáveis e ativos, minimizando riscos de doenças e estresse.  
-                <br>  <br>
-                <b>Sem um sistema de monitoramento adequado, você compromete a saúde e segurança do seu réptil, resultando em um gasto anual de cerca de <i style= "color: #ffa700;fon;font-family: sans-serif;font-size: 16px;"">R$ ${(valorLampadas * qtdLampadas) * qtd_Repteis}</i> em lâmpadas, além de um significativo desperdício desses recursos.</b>  <br> `
-                
+
             } else if (selecao === "no") {
-                show.style.display = 'block'
-                show.innerHTML = `Sem um sistema de iluminação adequado, você está comprometendo a <b><i style= "color: #ffa700;fon;font-family: sans-serif;font-size: large;"">saúde</i></b> do seu réptil! <br> <br>
-
-                <b>Por serem animais ectotérmicos, eles dependem do calor do ambiente externo para regular sua temperatura corpórea, diminuindo sua atividade em baixas temperaturas e podendo até levá-los a <i style= "color: #ffa700;fon;font-family: sans-serif;font-size: large;"">morte!</i></b> <br> <br>
-
-                É indicado que você compre lâmpadas de iluminação <b>UVA</b> e <b>UVB</b>, cerca de <b><i style= "color: #ffa700;fon;font-family: sans-serif;font-size: large;">R$ ${700 * qtd_Repteis}</i></b> anualmente com seus répteis, porém, sem o monitoramento adequado, essas lâmpadas tendem a desgastar mais facilmente, encurtando sua vida útil e gerando mais lixos tóxicos. <br> <br>
-
-                <b>Com nossos sensores, seria notório um aumento de até <i style= "color: #ffa700;fon;font-family: sans-serif;font-size: large;"">30%</i> de longevidade dessas lâmpadas, preservando assim o habitat e a saúde de seus répteis, além de um maior controle a respeito da temperatura do ambiente!</b>
+                mensagemResultado.style.display = 'block'
+                mensagemResultado.innerHTML = `<p style= "font-size: 20px; color:#292828">
+                A região selecionada é <b>${selecaoRegiao}</b>, onde sua média de temperatura varia de <span style= "color: red;font-weight: bold;font-family: sans-serif;font-size: 30px;text-shadow: 2px 2px black;" id="mediaRegiao"></span>
+                <br><br>
+                <b>Situação</b>: É indicado que adquira lâmpadas de iluminação <a id="ModalLampadas"><b>UVA</b> e <b>UVB</b></a>, custando aproximadamente <b><i style= "color: red;font-weight: bold; font-family: sans-serif; font-size: 30px; text-shadow: 2px 2px black">R$ ${700 * qtd_Repteis}.</i></b>
+                <br>
+                <br>
+                Contudo, <u>sem o monitoramento adequado</u>, elas tendem a desgastar mais facilmente, alterando a temperatura, encurtando sua vida útil, gerando <u>mais gastos</u> na sua substituição e mais lixos tóxicos.
+        
+                <br><br>
+                <u>Utilizando nossos sensores</u>, é notório um aumento de até <i style= "color: red;font-weight: bold;font-family: sans-serif; font-size: 30px; text-shadow: 2px 2px black">30%</i> de longevidade dessas lâmpadas, preservando assim o habitat e a saúde de seus répteis, além de um maior controle a respeito da temperatura do ambiente e <u>redução de gastos!</u>
+                </p>
                 `
+
+                if (selecaoRegiao === "Centro-Oeste") {
+                    mediaRegiao.innerHTML = "21°C a 27°C"
+                } else if (selecaoRegiao === "Nordeste") {
+                    mediaRegiao.innerHTML = "27°C a 34°C"
+                } else if (selecaoRegiao === "Norte") {
+                    mediaRegiao.innerHTML = "25°C a 28°C"
+                } else if (selecaoRegiao === "Sudeste") {
+                    mediaRegiao.innerHTML = "18°C a 24°C"
+                } else if (selecaoRegiao === "Sul") {
+                    mediaRegiao.innerHTML = "15°C a 21°C"
+                }
+            }
+        }
+
+        // Seleciona o modal
+        var modal = document.getElementById("myModal");
+
+        // Seleciona o texto que ativa o modal ao passar o cursor
+        var hoverTextTemp = document.getElementById("mediaRegiao");
+        var hoverTextLamp = document.getElementById("tipoLampada");
+        // var hoverText = document.getElementById("");
+
+        // Seleciona o elemento <span> que fecha o modal
+        var span = document.getElementsByClassName("close")[0];
+
+        // Quando o usuário passa o cursor sobre o texto, abre o modal
+        hoverTextTemp.onmouseenter = function () {
+            modal.style.display = "block";
+        }
+        hoverTextLamp.onmouseenter = function () {
+            modal.style.display = "block";
+        }
+        // hoverText.onmouseenter = function () {
+        //     modal.style.display = "block";
+        // }
+
+        // Quando o usuário tira o cursor do modal, fecha o modal
+        modal.onmouseleave = function () {
+            modal.style.display = "none";
+        }
+
+        // Quando o usuário clica no <span> (x), fecha o modal
+        span.onclick = function () {
+            modal.style.display = "none";
+        }
+
+        // Quando o usuário clica fora do modal, fecha o modal
+        window.onclick = function (event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
             }
         }
     }
-
-    function voltarCalculadora() {
-        espacamento.style.display = "block"
-        qtd_repteis_input.value = '';
-        sistema_iluminacao_select.value = 'vazio';
-        lampadas.style.display = 'none';
-        img_rep.style.display = 'block'
-        lampada_uvi.checked = false;
-        lampada_uva.checked = false;
-        lampada_comum.checked = false;
-        resposta_calculadora.style.display = 'none'
-        calculos_inf.style.display = 'block'
-        let cards = document.querySelector('.container');
-        cards.classList.toggle('flip');
-    }
-
-    // Mantive o código assim temporáriamente até finalizar a lógica, por favor, não altere!!!
-
 </script>
