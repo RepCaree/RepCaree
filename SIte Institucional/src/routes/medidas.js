@@ -13,6 +13,9 @@ router.get("/tempo-real/:idAquario", function (req, res) {
 router.post("/indicadores", function (req, res) {
     medidaController.indicadores(req, res);
 });
+router.post("/alertas", function (req, res) {
+    medidaController.alertas(req, res);
+});
 router.get("/buscarResultadoGraficoBar/:fk_empresa", function (req, res) {
     medidaController.buscarResultadoGraficoBar(req, res);
 });

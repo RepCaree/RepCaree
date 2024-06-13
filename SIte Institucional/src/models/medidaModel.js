@@ -1,41 +1,39 @@
 var database = require("../database/config");
 
-function indicadores(empresa) {
+function indicadores(empresa, habitat) {
 
     var instrucaoSql = `SELECT 
-    (SELECT AVG(l.LeituraTemp)
-     FROM Medidas m
-     INNER JOIN habitatAnimal ha ON m.fkHabitat = ha.idHabitat
-     INNER JOIN endereco e ON ha.fkEndereco = e.idEndereco
-     INNER JOIN empresa emp ON ha.fk_empresa = emp.id
-     INNER JOIN Leituras l ON m.fkLeituras = l.id
-     WHERE emp.id = ${empresa}) AS media_temperatura,
+    (SELECT 
+    AVG(LeituraTemp) 
+    FROM Leituras AS lei INNER JOIN Medidas AS med 
+    ON med.FkLeituras = lei.id
+    JOIN habitatAnimal AS hab ON med.fkHabitat = hab.idHabitat
+    JOIN empresa AS em ON hab.fk_empresa = em.id
+    WHERE em.id = '${empresa}') AS media_temperatura,
 
-    (SELECT AVG(l.LeituraLumi)
-     FROM Medidas m
-     INNER JOIN habitatAnimal ha ON m.fkHabitat = ha.idHabitat
-     INNER JOIN endereco e ON ha.fkEndereco = e.idEndereco
-     INNER JOIN empresa emp ON ha.fk_empresa = emp.id
-     INNER JOIN Leituras l ON m.fkLeituras = l.id
-     WHERE emp.id = ${empresa}) AS media_lumin,
+    (SELECT 
+        AVG(LeituraLumi) 
+    FROM Leituras AS lei INNER JOIN Medidas AS med 
+    ON med.FkLeituras = lei.id
+    JOIN habitatAnimal AS hab ON med.fkHabitat = hab.idHabitat
+    JOIN empresa AS em ON hab.fk_empresa = em.id
+    WHERE em.id = '${empresa}') AS media_lumin,
 
-    (SELECT l.LeituraLumi
-     FROM Medidas m
-     INNER JOIN habitatAnimal ha ON m.fkHabitat = ha.idHabitat
-     INNER JOIN endereco e ON ha.fkEndereco = e.idEndereco
-     INNER JOIN empresa emp ON ha.fk_empresa = emp.id
-     INNER JOIN Leituras l ON m.fkLeituras = l.id
-     WHERE emp.id = ${empresa}
-     ORDER BY l.LeituraLumi DESC LIMIT 1) AS FkLeituraLumi,
+   (SELECT lei.LeituraLumi
+     FROM Medidas AS med
+     INNER JOIN habitatAnimal AS hab ON med.fkHabitat = hab.idHabitat
+     INNER JOIN empresa emp ON hab.fk_empresa = emp.id
+     INNER JOIN Leituras AS lei ON med.fkLeituras = lei.id
+     WHERE emp.id = '${empresa}' AND hab.idHabitat = '${habitat}'
+     ORDER BY med.DataLeitura DESC LIMIT 1) AS FkLeituraLumi,
 
-    (SELECT l.LeituraTemp
-     FROM Medidas m
-     INNER JOIN habitatAnimal ha ON m.fkHabitat = ha.idHabitat
-     INNER JOIN endereco e ON ha.fkEndereco = e.idEndereco
-     INNER JOIN empresa emp ON ha.fk_empresa = emp.id
-     INNER JOIN Leituras l ON m.fkLeituras = l.id
-     WHERE emp.id = ${empresa}
-     ORDER BY l.LeituraTemp DESC LIMIT 1) AS FkLeituraTemp,
+   (SELECT lei.LeituraTemp
+     FROM Medidas AS med
+     INNER JOIN habitatAnimal AS hab ON med.fkHabitat = hab.idHabitat
+     INNER JOIN empresa emp ON hab.fk_empresa = emp.id
+     INNER JOIN Leituras AS lei ON med.fkLeituras = lei.id
+     WHERE emp.id = '${empresa}' AND hab.idHabitat = '${habitat}'
+     ORDER BY med.DataLeitura DESC LIMIT 1) AS FkLeituraTemp,
 
     (SELECT DATE_FORMAT(m.DataLeitura, '%d/%m/%Y %H:%i:%s')
      FROM Medidas m
@@ -44,43 +42,50 @@ function indicadores(empresa) {
      INNER JOIN empresa emp ON ha.fk_empresa = emp.id
      INNER JOIN Leituras l ON m.fkLeituras = l.id
      WHERE emp.id = ${empresa}
-     AND (l.LeituraTemp < 22 OR l.LeituraTemp > 29)
+     AND ((l.LeituraTemp < 22 OR l.LeituraTemp > 29) OR (l.LeituraLumi < 400 OR l.LeituraLumi > 800))
      ORDER BY m.idMedidas DESC LIMIT 1) AS ultimo_alerta,
 
-    (SELECT ha.idHabitat
-     FROM habitatAnimal ha
-     INNER JOIN empresa emp ON ha.fk_empresa = emp.id
-     WHERE emp.id = ${empresa}
-     AND ha.idHabitat IN (
-         SELECT m.fkHabitat
-         FROM Medidas m
-         INNER JOIN Leituras l ON m.fkLeituras = l.id
-         WHERE l.LeituraTemp < 22 OR l.LeituraTemp > 29
+   (SELECT hab.idHabitat
+     FROM habitatAnimal AS hab
+     INNER JOIN empresa AS emp ON hab.fk_empresa = emp.id
+     WHERE emp.id = 1
+     AND hab.idHabitat IN (
+         SELECT med.fkHabitat
+         FROM Medidas AS med
+         INNER JOIN Leituras AS lei ON med.fkLeituras = lei.id
+         WHERE ((lei.LeituraTemp < 22 OR lei.LeituraTemp > 29) OR (lei.LeituraLumi < 400 OR lei.LeituraLumi > 800))
      )
-     ORDER BY ha.idHabitat DESC LIMIT 1) AS ultimo_alertaID,
+     ORDER BY hab.idHabitat DESC LIMIT 1) AS ultimo_alertaID,
 
-    (SELECT COUNT(DISTINCT ha.idHabitat)
-     FROM Medidas m
-     INNER JOIN habitatAnimal ha ON m.fkHabitat = ha.idHabitat
-     INNER JOIN empresa emp ON ha.fk_empresa = emp.id
-     INNER JOIN Leituras l ON m.fkLeituras = l.id
-     WHERE emp.id = ${empresa}
-     AND (l.LeituraTemp < 22 OR l.LeituraTemp > 29)) AS quantidade_habitats_alerta,
 
-    (SELECT COUNT(ha.idHabitat)
-     FROM habitatAnimal ha
-     INNER JOIN empresa emp ON ha.fk_empresa = emp.id
-     WHERE emp.id = ${empresa}) AS qtd_habitats,
+    (SELECT COUNT(DISTINCT hab.idHabitat)
+     FROM Medidas AS med
+     INNER JOIN habitatAnimal AS hab ON med.fkHabitat = hab.idHabitat
+     INNER JOIN empresa AS emp ON hab.fk_empresa = emp.id
+     INNER JOIN Leituras AS lei ON med.fkLeituras = lei.id
+     WHERE emp.id = '${empresa}'
+     AND ((lei.LeituraTemp < 22 OR lei.LeituraTemp > 29) OR (lei.LeituraLumi < 400 OR lei.LeituraLumi > 800))) AS quantidade_habitats_alerta,
 
-   (SELECT 
-        (COUNT(DISTINCT CASE WHEN (l.LeituraTemp < 22 OR l.LeituraTemp > 29) THEN ha.idHabitat END) / COUNT(DISTINCT ha.idHabitat)) * 100 
-    FROM 
-        Medidas m
-        INNER JOIN habitatAnimal ha ON m.fkHabitat = ha.idHabitat
-        INNER JOIN empresa emp ON ha.fk_empresa = emp.id
-        INNER JOIN Leituras l ON m.fkLeituras = l.id
-    WHERE 
-        emp.id = ${empresa}) AS percentual_habitats_alerta,
+     (SELECT COUNT(hab.idHabitat)
+     FROM habitatAnimal AS hab
+     INNER JOIN empresa emp ON hab.fk_empresa = emp.id
+     WHERE emp.id = '${empresa}') AS qtd_habitats,
+
+
+    (SELECT COUNT(DISTINCT hab.idHabitat)
+    FROM Medidas AS med
+    INNER JOIN habitatAnimal AS hab ON med.fkHabitat = hab.idHabitat
+    INNER JOIN empresa AS emp ON hab.fk_empresa = emp.id
+    INNER JOIN Leituras AS lei ON med.fkLeituras = lei.id
+    WHERE emp.id = '1'
+    AND ((lei.LeituraTemp < 22 OR lei.LeituraTemp > 29) OR (lei.LeituraLumi < 400 OR lei.LeituraLumi > 800))
+    ) * 100.0 / 
+    (
+        SELECT COUNT(hab.idHabitat)
+        FROM habitatAnimal AS hab
+        INNER JOIN empresa emp ON hab.fk_empresa = emp.id
+        WHERE emp.id = '${empresa}'
+    ) AS percentual_habitats_em_alerta,
 
     (SELECT GROUP_CONCAT(subquery.idHabitat SEPARATOR ' e ')
      FROM (
@@ -157,25 +162,44 @@ function buscarResultadoGraficoBar(empresa) {
     GROUP BY Mes
     ORDER BY Mes;
                     `;
-  
+
     console.log("Executando a instrução SQL: \n" + instrucaoSql);
     return database.executar(instrucaoSql);
-  }
+}
 function buscarResultadoGraficoBarLumin(empresa) {
     var instrucaoSql = `
    
     SELECT AVG(l.LeituraTemp) AS MediaTemperatura
     FROM Leituras l;
                     `;
-  
+
     console.log("Executando a instrução SQL: \n" + instrucaoSql);
     return database.executar(instrucaoSql);
-  }
+}
+function alertas(empresa, habitat) {
+
+    var instrucaoSql = `
+   SELECT 
+    lei.LeituraLumi AS LeituraLumi,
+    lei.LeituraTemp AS LeituraTemp
+    FROM Leituras AS lei INNER JOIN Medidas AS med 
+    ON med.FkLeituras = lei.id
+    JOIN habitatAnimal AS hab ON med.fkHabitat = hab.idHabitat
+    JOIN empresa AS em ON hab.fk_empresa = em.id
+    WHERE em.id = '${empresa}' AND hab.idHabitat = '${habitat}'
+    ORDER BY med.DataLeitura DESC LIMIT 1
+;`;
+    
+
+    console.log("Executando a instrução SQL: \n" + instrucaoSql);
+    return database.executar(instrucaoSql);
+}
 
 module.exports = {
     buscarUltimasMedidas,
     buscarMedidasEmTempoReal,
     indicadores,
     buscarResultadoGraficoBar,
-    buscarResultadoGraficoBarLumin
+    buscarResultadoGraficoBarLumin,
+    alertas
 }

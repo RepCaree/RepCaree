@@ -25,9 +25,13 @@
 
 <!-- <body onload=" atualizarFeed()"> -->
 
-<body onload="obterKPIs()">
+<body>
   <!--  inicio do menu da dashboard  -->
-
+  <div class="meuPopup" id="meuPopup">
+    <span id="habitatAlerta"></span>
+    <span class="close-popup">x</span>
+  </div>
+<!--teste-->
   <div class="menu">
     <h1><span style="color: #0f7826">RHS</span>olutions</h1>
     <div class="div_fotouser">
@@ -113,7 +117,7 @@
           </div>
         </div>
         <div id="KPI2habi" class="KPIhabi" style="display: none;">
-          <span class="spanTitulo2" style="height: 100px">Tempetatura  atual</span>
+          <span class="spanTitulo2" style="height: 100px">Tempetatura atual</span>
           <div class="div_KPI2content">
             <span class="spanPorcentagemKPI2" id="medidasAtuaisTempLumin"> </span>
             <div class="divTextoKPI2">
@@ -200,57 +204,62 @@
   </div>
 </body>
 <script>
+   obterDadosKPIs()
+  validarAlertas()
   listar()
+  setInterval(validarAlertas, 5000)
+  setInterval(atualizarKPIs, 5000)
+
   function listar() {
-  fetch("/empresas/listarHabitats", {
-    method: "GET",
-  })
-    .then(function (resposta) {
-      if (!resposta.ok) {
-        throw new Error('Erro ao obter os dados');
-      }
-      return resposta.json();
+    fetch("/empresas/listarHabitats", {
+      method: "GET",
     })
-    .then(function (empresas) {
-      const ulLista = document.getElementById('ul_lista');
-      empresas.forEach((empresa) => {
-        const li = document.createElement('li');
-        const a = document.createElement('a');
-        li.className = 'li_habitat';
-        a.textContent = 'Habitat ' + empresa.id; 
-        a.href = '#' + empresa.id; 
-        a.className = "alistaHabitats"
-        a.addEventListener('click', function(event) {
-          event.preventDefault(); // Evita o comportamento padrão de seguir o link
-          sessionStorage.FK_HABITAT = empresa.id
-          mudarDash()
+      .then(function (resposta) {
+        if (!resposta.ok) {
+          throw new Error('Erro ao obter os dados');
+        }
+        return resposta.json();
+      })
+      .then(function (empresas) {
+        const ulLista = document.getElementById('ul_lista');
+        empresas.forEach((empresa) => {
+          const li = document.createElement('li');
+          const a = document.createElement('a');
+          li.className = 'li_habitat';
+          a.textContent = 'Habitat ' + empresa.id;
+          a.href = '#' + empresa.id;
+          a.className = "alistaHabitats"
+          a.addEventListener('click', function (event) {
+            event.preventDefault(); // Evita o comportamento padrão de seguir o link
+            sessionStorage.FK_HABITAT = empresa.id
+            mudarDash()
+          });
+          //Utilizando appendChild para adicionar um nó ao elemento pai (a) e (li)
+          li.appendChild(a);
+          ulLista.appendChild(li);
+
+
         });
-        //Utilizando appendChild para adicionar um nó ao elemento pai (a) e (li)
-        li.appendChild(a); 
-        ulLista.appendChild(li);
-       
-
+      })
+      .catch(function (erro) {
+        console.error(`#ERRO: ${erro}`);
       });
-    })
-    .catch(function (erro) {
-      console.error(`#ERRO: ${erro}`);
-    });
-}
-        
+  }
 
-
-  setInterval(atualizarKPIs(), 20000)
 
   // Função para obter os dados
   function obterDadosKPIs() {
-    var fk_empresa1 = sessionStorage.FK_EMPRESA;
+    var fk_empresa2 = sessionStorage.FK_EMPRESA;
+    var fk_habitat2 = sessionStorage.FK_HABITAT;
+
     return fetch("/medidas/indicadores", {
       method: "POST",
       headers: {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        fk_empresa: fk_empresa1
+        fk_empresa: fk_empresa2,
+        fk_habitat: fk_habitat2
       })
     })
       .then(function (resposta) {
@@ -273,12 +282,9 @@
           const ultimoAlerta = indicadores[0].ultimo_alerta;
           const qtdHabitatAlerta = indicadores[0].quantidade_habitats_alerta;
           const totalHabitat = indicadores[0].qtd_habitats;
-          const porcetagemAlertas = indicadores[0].percentual_habitats_alerta;
+          const porcetagemAlertas = parseFloat(indicadores[0].percentual_habitats_em_alerta);
           const idHabitatAlerta = indicadores[0].ultimo_alertaID;
           const idHabitatAlerta2Ultmos = indicadores[0].ultimo2_alertaID;
-
-          
-      
 
           // maior número inteiro
           mediaTemperatura = Math.ceil(mediaTemp);
@@ -288,13 +294,17 @@
           ultimoAlerta1 = ultimoAlerta;
           totalHabitat1 = totalHabitat;
           qtdHabitatAlerta1 = qtdHabitatAlerta;
-          porcetagemAlertas1 = Math.ceil(porcetagemAlertas);
+          porcetagemAlertas1 = Math.abs(porcetagemAlertas);
           idHabitatAlerta1 = idHabitatAlerta;
           idHabitatAlerta2Ultmos1 = idHabitatAlerta2Ultmos;
+
+          console.log(porcetagemAlertas);
         }
         sessionStorage.MEDIA_ATUALTEMP = mediaAtualTemp1;
         sessionStorage.MEDIA_ATUALLUMIN = mediaAtualLumin1;
-        
+        sessionStorage.ID_HABITAT_ALERTA = idHabitatAlerta1;
+        sessionStorage.DADO_ULTIMO_ALERTA = ultimoAlerta1;
+
         var mediaTemp = sessionStorage.MEDIA_ATUAL;
         document.getElementById('span_media_temp').innerHTML = `<span>${mediaTemperatura} °C</span>`;
         document.getElementById('span_media_lumi').innerHTML = `<strong><span>${mediaLuminocidade} Lux</span></strong>`;
@@ -439,6 +449,7 @@
   // }
 
   function mudarDash() {
+    atualizarKPIs();
     tituloAlt.innerHTML = "Habitat 5"
     tituloDash.style.display = 'none'
     KPI1.style.display = 'none'
@@ -546,87 +557,87 @@
     // });
 
     let graficoBarLuminVariacao;
-  function obterDadosGraficoBarLumin() {
-    var fk_empresa = sessionStorage.FK_EMPRESA;
+    function obterDadosGraficoBarLumin() {
+      var fk_empresa = sessionStorage.FK_EMPRESA;
 
-    fetch(`/medidas/buscarResultadoGraficoBarLumin/${fk_empresa}`, {
-      method: "GET"
-    }).then(function (resposta) {
-      if (resposta.ok) {
-        return resposta.json();
-        graficoLuminVariacao.update();
-        ;
-      } else {
+      fetch(`/medidas/buscarResultadoGraficoBarLumin/${fk_empresa}`, {
+        method: "GET"
+      }).then(function (resposta) {
+        if (resposta.ok) {
+          return resposta.json();
+          graficoLuminVariacao.update();
+          ;
+        } else {
 
-        console.log("Houve um erro ao tentar realizar a busca!");
-      }
-
-    })
-      .then(function (data) {
-        if (data.length === 0) {
-          console.warn("Nenhum resultado encontrado");
-          return;
+          console.log("Houve um erro ao tentar realizar a busca!");
         }
 
-        atualizarGraficoBarLumin(data);
       })
-      .catch(function (erro) {
-        console.log(erro);
-      })
+        .then(function (data) {
+          if (data.length === 0) {
+            console.warn("Nenhum resultado encontrado");
+            return;
+          }
 
-    return false;
-  }
+          atualizarGraficoBarLumin(data);
+        })
+        .catch(function (erro) {
+          console.log(erro);
+        })
 
-  function atualizarGraficoBarLumin(dados) {
-    console.log("Dados recebidos para o gráfico de Barra:", dados);
-
-    const ctx = document.getElementById(`luminosidadeHabi`);
-
-    if (graficoBarLuminVariacao) {
-      graficoBarLuminVariacao.destroy();
+      return false;
     }
 
-    const duvidasPassos = Object.values(dados[0]).map(Number);
-    const passos =  ["13H"];
+    function atualizarGraficoBarLumin(dados) {
+      console.log("Dados recebidos para o gráfico de Barra:", dados);
 
-    graficoBarLuminVariacao = new Chart(ctx, {
-      type: 'bar',
-      data: {
-        labels:  ["13H"],
-        datasets: [{
-          label: 'luminocidade',
-          data: duvidasPassos,
+      const ctx = document.getElementById(`luminosidadeHabi`);
 
-          backgroundColor:
-            '#fd2828'
-          ,
-          borderColor: '#fd2828',
-          tension: 0.1
-        }]
-      },
-      responsive: true,
-      options: {
+      if (graficoBarLuminVariacao) {
+        graficoBarLuminVariacao.destroy();
+      }
+
+      const duvidasPassos = Object.values(dados[0]).map(Number);
+      const passos = ["13H"];
+
+      graficoBarLuminVariacao = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: ["13H"],
+          datasets: [{
+            label: 'luminocidade',
+            data: duvidasPassos,
+
+            backgroundColor:
+              '#fd2828'
+            ,
+            borderColor: '#fd2828',
+            tension: 0.1
+          }]
+        },
         responsive: true,
-        animation: false,
-        plugins: {
-          legend: {
-            labels: {
-              color: 'black'
-            }
-          },
-          y: {
-            ticks: {
-              color: 'black'
+        options: {
+          responsive: true,
+          animation: false,
+          plugins: {
+            legend: {
+              labels: {
+                color: 'black'
+              }
+            },
+            y: {
+              ticks: {
+                color: 'black'
+              }
             }
           }
         }
-      }
-    });
-  }
+      });
+    }
 
 
-  obterDadosGraficoBarLumin();
-  setInterval(atualizarGraficoBarLumin, 5000);
+    obterDadosGraficoBarLumin();
+    setInterval(atualizarGraficoBarLumin, 5000);
   }
   let graficoBar;
   function obterDadosGraficoBar() {
@@ -735,7 +746,7 @@
   obterDadosGraficoBar();
   setInterval(obterDadosGraficoBar, 100000);
 
- 
+
 
 
 </script>
