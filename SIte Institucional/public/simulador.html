@@ -14,9 +14,7 @@
         <a href="index.html"><img class="img_seta" src="IMG/Cadastro/seta-direita.png" alt="" /></a>
     </div>
     <div class="containerMae">
-        <a href="simulador.html">
-            <h2 class="title" style="cursor: pointer; text-decoration: none;">SIMULADOR FINANCEIRO</h2>
-        </a>
+        <a href="simulador.html"></a>
         <div class="containerFilhos">
             <!-- Container principal que guarda o container da esquerda(Inputs e botão) e da direita(Resposta) -->
             <div class="containerFilho1"> <!-- Container da esquerda, contendo Inputs e botão -->
@@ -80,16 +78,32 @@
                 <!-- Container da direita, contém a imagem até que o cliente clique no botão, ao clicar, a imagem é oculta e aparece a resposta -->
                 <!-- div que será puxada pelo innerHTML, para que apareça a resposta -->
                 <div id="mensagemResultado">
-                    <img src="./IMG/Home_fundo/logoRHS.png" class="logoGrande" id="img_rep">
+                    <h2 class="title" style="cursor: pointer; text-decoration: none;">SIMULADOR FINANCEIRO</h2>
                     <!-- Imagem antes do cliente clicar no botão -->
                 </div>
             </div>
         </div>
-        <div id="myModal" class="modal">
+
+        <div id="myModal" class="modal" style="overflow: hidden;">   
             <div class="modal-content">
                 <span class="close">&times;</span>
-                <p>Conteúdo do modal</p>
+                <p>Cada região possui sua variação se temperatura específica, com suas características e ambientes. Devido a isso, a quantidade de lâmpadas por região pode variar, para assim, tornar o habitat do réptil mais agradável.
+                </p>
             </div>
+        </div>
+        <div id="myModal2" class="modal" style="overflow: hidden;">   
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <p>Os répteis são ectotérmicos e dependem do calor externo para funcionar. Em frio, tornam-se inativos e podem morrer. Assim, o uso de lâmpadas é essencial para fornecer o calor necessário, considerando as seguintes características:
+                    <br>
+                    <b>- Lâmpadas Comuns:</b> Fornecem iluminação básica e calor para répteis, criando um ciclo dia/noite adequado e gerando aquecimento.
+                    <br>
+                    <b>- Lâmpadas UVA:</b> Influencia no comportamento dos répteis, incluindo suas atividades em geral. Auxiliando os répteis a verem o ambiente de forma mais natural, semelhante à luz do sol.
+                    <br>
+                    <b>- Lâmpadas UVB:</b> Evitam que se desenvolva deficiências que afetam seus ossos e saúde geral, sendo crucial para a saúde dos répteis, pois permite a síntese de vitamina D3 em sua pele.
+                </p>
+            </div>
+        
         </div>
     </div>
 </body>
@@ -178,7 +192,7 @@
                 <b>Situação</b>: <a id="tipoLampada"></a>
                 <br>
                 <br>
-                <u>Sem um sistema de monitoramento adequado</u>, a saúde e segurança do seu réptil é comprometida, resultando em um <u>gasto anual</u> de cerca de <i style= "color: red;font-weight: bold;font-family: sans-serif;font-size: 30px;text-shadow: 2px 2px black;"><b>R$ ${(valorLampadas * qtdLampadas) * qtd_Repteis}</b></i> em lâmpadas, além de um significativo desperdício de recursos. </p> <br>`
+                <u>Sem um sistema de monitoramento adequado</u>, a saúde e segurança do seu réptil é comprometida, resultando em um <u>gasto anual</u> de cerca de <i style= "color: red;font-weight: bold;font-family: sans-serif;font-size: 30px;text-shadow: 2px 2px black;"><b>R$ ${(valorLampadas * qtdLampadas) * qtd_Repteis}</b></i> em lâmpadas, além de um significativo desperdício de recursos.  </p> <br>`
 
                 if (selecaoRegiao === "Centro-Oeste") {
                     mediaRegiao.innerHTML = "21°C a 27°C"
@@ -214,7 +228,7 @@
                 mensagemResultado.innerHTML = `<p style= "font-size: 20px; color:#292828">
                 A região selecionada é <b>${selecaoRegiao}</b>, onde sua média de temperatura varia de <span style= "color: red;font-weight: bold;font-family: sans-serif;font-size: 30px;text-shadow: 2px 2px black;" id="mediaRegiao"></span>
                 <br><br>
-                <b>Situação</b>: É indicado que adquira lâmpadas de iluminação <a id="ModalLampadas"><b>UVA</b> e <b>UVB</b></a>, custando aproximadamente <b><i style= "color: red;font-weight: bold; font-family: sans-serif; font-size: 30px; text-shadow: 2px 2px black">R$ ${700 * qtd_Repteis}.</i></b>
+                <b>Situação</b>: É indicado que adquira lâmpadas de iluminação <a id="ModalLampadas"><b>UVA</b> e <b>UVB</b></a>, custando aproximadamente <b><i style= "color: red;font-weight: bold; font-family: sans-serif; font-size: 30px; text-shadow: 2px 2px black"><a id="tipoLampada">R$ ${700 * qtd_Repteis}x</a>.</i></b>
                 <br>
                 <br>
                 Contudo, <u>sem o monitoramento adequado</u>, elas tendem a desgastar mais facilmente, alterando a temperatura, encurtando sua vida útil, gerando <u>mais gastos</u> na sua substituição e mais lixos tóxicos.
@@ -240,40 +254,51 @@
 
         // Seleciona o modal
         var modal = document.getElementById("myModal");
+        var modal2 = document.getElementById("myModal2");
 
         // Seleciona o texto que ativa o modal ao passar o cursor
         var hoverTextTemp = document.getElementById("mediaRegiao");
-        var hoverTextLamp = document.getElementById("tipoLampada");
+        var hoverTextLamp2 = document.getElementById("tipoLampada");
         // var hoverText = document.getElementById("");
 
         // Seleciona o elemento <span> que fecha o modal
         var span = document.getElementsByClassName("close")[0];
+        var span2 = document.getElementsByClassName("close")[0];
 
         // Quando o usuário passa o cursor sobre o texto, abre o modal
         hoverTextTemp.onmouseenter = function () {
             modal.style.display = "block";
         }
-        hoverTextLamp.onmouseenter = function () {
-            modal.style.display = "block";
+        hoverTextLamp2.onmouseenter = function () {
+            modal2.style.display = "block";
         }
-        // hoverText.onmouseenter = function () {
-        //     modal.style.display = "block";
-        // }
 
         // Quando o usuário tira o cursor do modal, fecha o modal
         modal.onmouseleave = function () {
             modal.style.display = "none";
+        }
+        modal2.onmouseleave = function () {
+            modal2.style.display = "none";
         }
 
         // Quando o usuário clica no <span> (x), fecha o modal
         span.onclick = function () {
             modal.style.display = "none";
         }
+        span2.onclick = function () {
+            modal2.style.display = "none";
+        }
+        
 
         // Quando o usuário clica fora do modal, fecha o modal
         window.onclick = function (event) {
             if (event.target == modal) {
                 modal.style.display = "none";
+            }
+        }
+        window.onclick = function (event) {
+            if (event.target == modal2) {
+                modal2.style.display = "none";
             }
         }
     }
