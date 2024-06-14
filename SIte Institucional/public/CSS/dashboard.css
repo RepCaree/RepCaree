@@ -229,9 +229,14 @@ border-radius: 10px;
   /* margin-bottom: 15px; */
 }
 .divTextoKPI3 span{
-font-family: 'Poetsen One';
-font-size: 30px;
-color: #548D3D;
+  font-family: 'Poetsen One';
+
+}
+.span_media_temp{
+ 
+  font-size: 30px;
+  color: #548D3D;
+  font-weight: bold;
 }
 .divTextoKPI3{
   font-size: 18px;
@@ -259,8 +264,12 @@ color: #548D3D;
 }
 .divTextoKPI4 span{
 font-family: 'Poetsen One';
-font-size: 30px;
-color: #548D3D;
+
+
+}
+.span_media_lumi{
+  color: #548D3D;
+  font-size: 30px;
 }
 .divTextoKPI4{
   font-size: 18px;

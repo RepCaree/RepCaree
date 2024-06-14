@@ -9,7 +9,7 @@ function indicadores(req, res) {
             res.status(200).json(resultado);
         })
         .catch((error) => {
-            console.error("Erro ao obter dados de ranking:", error);
+            console.error("Erro ao obter dados dos indicadores:", error);
             res.status(500).json({ error: "Erro ao obter dados dos indicadores" });
         });
 }
@@ -23,7 +23,7 @@ function alertas(req, res) {
             res.status(200).json(resultado);
         })
         .catch((error) => {
-            console.error("Erro ao obter dados de ranking:", error);
+            console.error("Erro ao obter dados dos alertas:", error);
             res.status(500).json({ error: "Erro ao obter dados dos alertas" });
         });
 }

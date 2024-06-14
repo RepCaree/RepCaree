@@ -3,21 +3,19 @@ var database = require("../database/config");
 function indicadores(empresa, habitat) {
 
     var instrucaoSql = `
-    SELECT 
+  SELECT 
     (SELECT AVG(med.LeituraTemp)
      FROM Medidas AS med
      INNER JOIN habitatAnimal AS hab ON med.fkHabitat = hab.idHabitat
      INNER JOIN empresa AS em ON hab.fk_empresa = em.id
      WHERE em.id = '${empresa}') AS media_temperatura,
 
-
     (SELECT AVG(med.LeituraLumi)
      FROM Medidas AS med
      INNER JOIN habitatAnimal AS hab ON med.fkHabitat = hab.idHabitat
      INNER JOIN empresa AS em ON hab.fk_empresa = em.id
-     WHERE em.id = '${empresa}) AS media_lumin,
+     WHERE em.id = '${empresa}') AS media_lumin,
 
-   
     (SELECT med.LeituraLumi
      FROM Medidas AS med
      INNER JOIN habitatAnimal AS hab ON med.fkHabitat = hab.idHabitat
@@ -25,7 +23,6 @@ function indicadores(empresa, habitat) {
      WHERE emp.id = '${empresa}' AND hab.idHabitat = '${habitat}'
      ORDER BY med.idMedidas DESC LIMIT 1) AS FkLeituraLumi,
 
- 
     (SELECT med.LeituraTemp
      FROM Medidas AS med
      INNER JOIN habitatAnimal AS hab ON med.fkHabitat = hab.idHabitat
@@ -33,7 +30,6 @@ function indicadores(empresa, habitat) {
      WHERE emp.id = '${empresa}' AND hab.idHabitat = '${habitat}'
      ORDER BY med.idMedidas DESC LIMIT 1) AS FkLeituraTemp,
 
-   
     (SELECT DATE_FORMAT(med.DataLeitura, '%d/%m/%Y %H:%i:%s')
      FROM Medidas AS med
      INNER JOIN habitatAnimal AS hab ON med.fkHabitat = hab.idHabitat
@@ -43,7 +39,6 @@ function indicadores(empresa, habitat) {
      AND ((med.LeituraTemp < 22 OR med.LeituraTemp > 29) OR (med.LeituraLumi < 400 OR med.LeituraLumi > 800))
      ORDER BY med.idMedidas DESC LIMIT 1) AS ultimo_alerta,
 
-    
     (SELECT hab.idHabitat
      FROM habitatAnimal AS hab
      INNER JOIN empresa AS emp ON hab.fk_empresa = emp.id
@@ -55,7 +50,6 @@ function indicadores(empresa, habitat) {
      )
      ORDER BY hab.idHabitat DESC LIMIT 1) AS ultimo_alertaID,
 
-    
     (SELECT COUNT(DISTINCT hab.idHabitat)
      FROM Medidas AS med
      INNER JOIN habitatAnimal AS hab ON med.fkHabitat = hab.idHabitat
@@ -63,12 +57,10 @@ function indicadores(empresa, habitat) {
      WHERE emp.id = '${empresa}'
      AND ((med.LeituraTemp < 22 OR med.LeituraTemp > 29) OR (med.LeituraLumi < 400 OR med.LeituraLumi > 800))) AS quantidade_habitats_alerta,
 
-
     (SELECT COUNT(hab.idHabitat)
      FROM habitatAnimal AS hab
      INNER JOIN empresa AS emp ON hab.fk_empresa = emp.id
      WHERE emp.id = '${empresa}') AS qtd_habitats,
-
 
     (SELECT COUNT(DISTINCT hab.idHabitat) * 100.0 / (
          SELECT COUNT(hab.idHabitat)
@@ -94,7 +86,8 @@ function indicadores(empresa, habitat) {
          )
          ORDER BY ha.idHabitat DESC
          LIMIT 2
-     ) AS subquery) AS ultimo2_alertaID;`;
+     ) AS subquery) AS ultimo2_alertaID;
+`;
 
     console.log("Executando a instrução SQL: \n" + instrucaoSql);
     return database.executar(instrucaoSql);
@@ -208,15 +201,15 @@ FROM (
 //     return database.executar(instrucaoSql);
 // }
 
+
 function alertas(empresa, habitat) {
 
     var instrucaoSql = `
    SELECT 
-    lei.LeituraLumi AS LeituraLumi,
-    lei.LeituraTemp AS LeituraTemp
-    FROM Leituras AS lei INNER JOIN Medidas AS med 
-    ON med.FkLeituras = lei.id
-    JOIN habitatAnimal AS hab ON med.fkHabitat = hab.idHabitat
+    med.LeituraLumi AS LeituraLumi,
+    med.LeituraTemp AS LeituraTemp
+    FROM Medidas AS med
+    INNER JOIN habitatAnimal AS hab ON med.fkHabitat = hab.idHabitat
     JOIN empresa AS em ON hab.fk_empresa = em.id
     WHERE em.id = '${empresa}' AND hab.idHabitat = '${habitat}'
     ORDER BY med.DataLeitura DESC LIMIT 1
