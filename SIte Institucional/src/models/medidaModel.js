@@ -101,7 +101,7 @@ function buscarUltimasMedidas(idAquario, limite_linhas) {
                         momento,
                         DATE_FORMAT(momento,'%H:%i:%s') as momento_grafico
                     FROM medida
-                    WHERE fk_aquario = ${idAquario}
+                    WHERE fk_aquario = 1
                     ORDER BY id DESC LIMIT ${limite_linhas}`;
 
     console.log("Executando a instrução SQL: \n" + instrucaoSql);
@@ -115,7 +115,7 @@ function buscarMedidasEmTempoReal(idAquario) {
         dht11_umidade as umidade,
                         DATE_FORMAT(momento,'%H:%i:%s') as momento_grafico, 
                         fk_aquario 
-                        FROM medida WHERE fk_aquario = ${idAquario} 
+                        FROM medida WHERE fk_aquario = 1
                     ORDER BY id DESC LIMIT 1`;
 
     console.log("Executando a instrução SQL: \n" + instrucaoSql);
@@ -124,30 +124,19 @@ function buscarMedidasEmTempoReal(idAquario) {
 
 function buscarResultadoGraficoBar() {
     var instrucaoSql = `
-    SELECT 
-        AVG(CASE WHEN LeituraTemp < 22 THEN LeituraTemp END) AS MediaAbaixo22,
-        AVG(CASE WHEN LeituraTemp >= 22 AND LeituraTemp <= 29 THEN LeituraTemp END) AS MediaEntre22e29,
-        AVG(CASE WHEN LeituraTemp > 29 THEN LeituraTemp END) AS MediaAcima29
+       SELECT 
+        AVG(CASE WHEN LeituraTemp < 22 THEN LeituraTemp END) AS HabitatsAbaixo22,
+        AVG(CASE WHEN LeituraTemp >= 22 AND LeituraTemp <= 29 THEN LeituraTemp END) AS HabitatsEntre22e29,
+        AVG(CASE WHEN LeituraTemp > 29 THEN LeituraTemp END) AS HabitatsAcima29
     FROM (
         SELECT 
             MONTH(DataLeitura) AS Mes,
             LeituraTemp
         FROM Medidas
-        JOIN Leituras ON Medidas.fkLeituras = Leituras.id
-        WHERE MONTH(DataLeitura) BETWEEN 1 AND 6
+        WHERE MONTH(DataLeitura) = MONTH(NOW())
     ) AS TempMes
     GROUP BY Mes
     ORDER BY Mes;
-                    `;
-
-    console.log("Executando a instrução SQL: \n" + instrucaoSql);
-    return database.executar(instrucaoSql);
-}
-function buscarResultadoGraficoBarLumin(empresa) {
-    var instrucaoSql = `
-   
-    SELECT AVG(l.LeituraTemp) AS MediaTemperatura
-    FROM Leituras l;
                     `;
 
     console.log("Executando a instrução SQL: \n" + instrucaoSql);
@@ -157,39 +146,52 @@ function buscarResultadoGraficoBarLumin(empresa) {
 function buscarResultadoGraficoPie() {
     var instrucaoSql = `
     SELECT 
-        AVG(CASE WHEN LeituraTemp < 22 THEN LeituraTemp END) AS MediaAbaixo22,
-        AVG(CASE WHEN LeituraTemp >= 22 AND LeituraTemp <= 29 THEN LeituraTemp END) AS MediaEntre22e29,
-        AVG(CASE WHEN LeituraTemp > 29 THEN LeituraTemp END) AS MediaAcima29
-    FROM (
-        SELECT 
-            MONTH(DataLeitura) AS Mes,
-            LeituraTemp
-        FROM Medidas
-        JOIN Leituras ON Medidas.fkLeituras = Leituras.id
-        WHERE MONTH(DataLeitura) BETWEEN 1 AND 6
-    ) AS TempMes
-    GROUP BY Mes
-    ORDER BY Mes;
+    SUM(CASE WHEN MediaLumi < 400 THEN 1 ELSE 0 END) AS HabitatsAbaixo400,
+    SUM(CASE WHEN MediaLumi >= 400 AND MediaLumi <= 800 THEN 1 ELSE 0 END) AS HabitatsEntre400e800,
+    SUM(CASE WHEN MediaLumi > 800 THEN 1 ELSE 0 END) AS HabitatsAcima800
+FROM (
+    SELECT 
+        fkHabitat,
+        AVG(LeituraLumi) AS MediaLumi
+    FROM Medidas
+    WHERE MONTH(DataLeitura) = MONTH(NOW())
+      AND YEAR(DataLeitura) = YEAR(NOW())
+    GROUP BY fkHabitat
+) AS MediasHabitat;
                     `;
 
     console.log("Executando a instrução SQL: \n" + instrucaoSql);
     return database.executar(instrucaoSql);
 }
-function buscarResultadoGraficoBarLumin(empresa) {
+
+function buscarResultadoGraficoBarLumin(habitat) {
     var instrucaoSql = `
    
-    SELECT AVG(l.LeituraTemp) AS MediaTemperatura
-    FROM Leituras l;
+   SELECT 
+        LeituraTemp as luminosidade,
+                        DataLeitura,
+                        DATE_FORMAT(DataLeitura,'%H:%i:%s') as momento_grafico
+                    FROM Medidas
+                    WHERE fkHabitat = '${habitat}'
+                    ORDER BY idMedidas DESC LIMIT 7;
+
                     `;
 
     console.log("Executando a instrução SQL: \n" + instrucaoSql);
     return database.executar(instrucaoSql);
 }
-function buscarResultadoGraficoLineTemp(empresa) {
+
+function buscarResultadoGraficoLineTemp(habitat) {
     var instrucaoSql = `
    
-    SELECT AVG(l.LeituraTemp) AS MediaTemperatura
-    FROM Leituras l;
+ SELECT 
+        LeituraLumi as temperatura,
+                        DataLeitura,
+                        DATE_FORMAT(DataLeitura,'%H:%i:%s') as momento_grafico
+                    FROM Medidas
+                    WHERE fkHabitat = '${habitat}'
+                    ORDER BY idMedidas DESC LIMIT 7;
+
                     `;
 
     console.log("Executando a instrução SQL: \n" + instrucaoSql);

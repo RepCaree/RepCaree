@@ -71,7 +71,7 @@ function buscarMedidasEmTempoReal(req, res) {
 
 function buscarResultadoGraficoBar(req, res) {
 
-    var empresa = req.params.fk_empresa;
+    var empresa = req.params.fk_habitat;
 
     console.log(`controller buscando os resultados do jogador`);
 
@@ -87,15 +87,14 @@ function buscarResultadoGraficoBar(req, res) {
         res.status(500).json(erro.sqlMessage);
     });
 }
-
 
 function buscarResultadoGraficoPie(req, res) {
 
-    var empresa = req.params.fk_empresa;
+    var idHabitat = req.params.idHabitat;
 
     console.log(`controller buscando os resultados do jogador`);
 
-    medidaModel.buscarResultadoGraficoBar(empresa).then(function (resultado) {
+    medidaModel.buscarResultadoGraficoPie(idHabitat).then(function (resultado) {
         if (resultado.length > 0) {
             res.status(200).json(resultado); /*resposta que o bd traz*/
         } else {
@@ -107,32 +106,14 @@ function buscarResultadoGraficoPie(req, res) {
         res.status(500).json(erro.sqlMessage);
     });
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 function buscarResultadoGraficoBarLumin(req, res) {
 
-    var empresa = req.params.fk_empresa;
+    var fk_habitat = req.params.fk_habitat;
 
     console.log(`controller buscando os resultados do jogador`);
 
-    medidaModel.buscarResultadoGraficoBarLumin(empresa).then(function (resultado) {
+    medidaModel.buscarResultadoGraficoBarLumin(fk_habitat).then(function (resultado) {
         if (resultado.length > 0) {
             res.status(200).json(resultado); /*resposta que o bd traz*/
         } else {
@@ -144,13 +125,14 @@ function buscarResultadoGraficoBarLumin(req, res) {
         res.status(500).json(erro.sqlMessage);
     });
 }
+
 function buscarResultadoGraficoLineTemp(req, res) {
 
-    var empresa = req.params.fk_empresa;
+    var fk_habitat = req.params.fk_habitat;
 
     console.log(`controller buscando os resultados do jogador`);
 
-    medidaModel.buscarResultadoGraficoBarLumin(empresa).then(function (resultado) {
+    medidaModel.buscarResultadoGraficoLineTemp(fk_habitat).then(function (resultado) {
         if (resultado.length > 0) {
             res.status(200).json(resultado); /*resposta que o bd traz*/
         } else {

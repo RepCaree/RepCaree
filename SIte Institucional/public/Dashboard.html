@@ -12,7 +12,6 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
   <script src="http://www.chartjs.org/dist/2.7.1/Chart.js"></script>
   <script src="http://www.chartjs.org/samples/latest/utils.js"></script>
-  <script src="./js/sessao.js"></script>
   <script src="./js/alerta2.js"></script>
   <style>
     canvas {
@@ -83,21 +82,21 @@
     </div>
     <div id="graftemp" class="div_graficos">
       <div class="div_grafico">
-        <span>Análise de Temperatura(22º a 29ºC) nos Habitats</span>
+        <span>Análise de Temperatura(22º a 29ºC) no ultimo mês</span>
         <canvas id="lm35Temperatura"></canvas>
       </div>
       <div id="graflumi" class="div_grafico">
-        <span>Média de Luminosidade(120 a 900) nos Habitats</span>
+        <span>Média de Luminosidade(400 a 800) nos Habitats</span>
         <canvas id="luminosidade"></canvas>
       </div>
     </div>
     <div id="temphabi" class="div_graficos" style="display: none;">
       <div class="div_grafico">
-        <span>Variação da Luminosidade a cada 6 horas</span>
+        <span>Ultimos 7 registros de temperatura</span>
         <canvas id="luminosidadeHabi"></canvas>
       </div>
       <div id="lumihabi" class="div_grafico" style="display: none;">
-        <span>Variação da Temperatura a cada 6 horas</span>
+        <span>Ultimos 7 registros de luminosidade </span>
         <canvas id="lm35TemperaturaHabi"></canvas>
       </div>
     </div>
@@ -184,6 +183,7 @@
   </div>
 </body>
 <script>
+  let idHabitat = sessionStorage.FK_HABITAT;
   NomeUsuario.innerHTML =  sessionStorage.NOME_USUARIO;
    obterDadosKPIs()
   validarAlertas()
@@ -208,7 +208,7 @@
           const a = document.createElement('a');
           li.className = 'li_habitat';
           a.textContent = 'Habitat ' + empresa.id;
-          a.href = '#' + empresa.id;
+          a.onclick = '#' + empresa.id;
           a.className = "alistaHabitats"
           a.id = 'nomeHabitat'   
           a.addEventListener('click', function (event) {
@@ -270,7 +270,7 @@
 
           // maior número inteiro
           mediaTemperatura = Math.ceil(mediaTemp);
-          mediaLuminocidade = Math.ceil(mediaLumin);
+          mediaLuminosidade = Math.ceil(mediaLumin);
           mediaAtualLumin1 = Math.ceil(mediaAtualLumin);
           mediaAtualTemp1 = Math.ceil(mediaAtualTemp);
           ultimoAlerta1 = ultimoAlerta;
@@ -289,10 +289,10 @@
         sessionStorage.ID_HABITAT_ALERTA = idHabitatAlerta1;
         sessionStorage.DADO_ULTIMO_ALERTA = ultimoAlerta1;
         sessionStorage.MEDIA_GERAL_TEMP = mediaTemperatura;
-        sessionStorage.MEDIA_GERAL_LUMIN = mediaLuminocidade;
+        sessionStorage.MEDIA_GERAL_LUMIN = mediaLuminosidade;
         
         document.getElementById('span_media_temp').innerHTML = `<span>${mediaTemperatura} °C</span>`;
-        document.getElementById('span_media_lumi').innerHTML = `<strong><span>${mediaLuminocidade} Lux</span></strong>`;
+        document.getElementById('span_media_lumi').innerHTML = `<strong><span>${mediaLuminosidade} Lux</span></strong>`;
         document.getElementById('medidasAtuaisTempLumin').innerHTML = `<strong><span>${mediaAtualTemp1}°C </span></strong>`;
         document.getElementById('medidasAtuaisTempLumin2').innerHTML = `<strong><span>${mediaAtualLumin1} Lux</span></strong>`;
         document.getElementById('textoKPI').innerHTML = `<span>${ultimoAlerta1}</span>`;
@@ -307,46 +307,6 @@
         console.error(`#ERRO: ${erro.message}`);
       });
   }
-
-
-
-  // const contextoLm35Temperatura = document
-  //   .getElementById("luminosidade")
-  //   .getContext("2d");
-
-  // var lm35Temperatura = new Chart(contextoLm35Temperatura, {
-  //   type: "pie",
-  //   data: {
-  //     labels: [
-  //       "Abaixo da média",
-  //       "Na média",
-  //       "Acima da média"
-  //     ],
-  //     datasets: [
-  //       {
-  //         label: "Luminosidade",
-  //         data: [1, 18, 1],
-  //         borderwidht: 1,
-  //         backgroundColor: ["#75b9d7", "#ffd166", "#ff4d4d"],
-  //         borderColor: ["#75b9d7", "#ffd166", "#ff4d4d"]
-  //       },
-  //     ],
-  //   },
-  //   options: {
-  //     scales: {
-  //       xAxes: [
-  
-  //       ],
-  //       yAxes: [
-
-  //       ],
-  //     },
-  //     animation: {
-  //       duration: 0,
-  //     },
-  //   },
-  // });
-
 
   const barraDePesquisa = document.querySelector("input"); //<input/>
   const lista = document.querySelector("ul"); //<ul></ul>
@@ -363,13 +323,17 @@
     });
   });
 
-
+  let habitat = sessionStorage.FK_HABITAT;
   function mudarDash() {
     atualizarKPIs();
-    const idHabitat = sessionStorage.FK_HABITAT;
-
-    tituloAlt.innerHTML = `Habitat ${idHabitat}`
-    tituloDash.style.display = 'none'
+    if(habitat == 1){
+      tituloAlt.innerHTML = "Habitat 1"
+      tituloDash.style.display = 'none'
+    } 
+     if (habitat != 1){
+      tituloAlt.innerHTML = "Habitat 2"
+      tituloDash.style.display = 'none'
+    }
     KPI1.style.display = 'none'
     KPI2.style.display = 'none'
     KPI3.style.display = 'none'
@@ -386,53 +350,8 @@
       .getElementById("lm35TemperaturaHabi")
       .getContext("2d");
 
-  //   var lm35Temperatura = new Chart(contextoLm35Temperatura, {
-  //     type: "line",
-  //     data: {
-  //       labels: ['13H', '14H', '15H', '16H', '17H', '18H'],
-  //       datasets: [{
-  //         label: 'Temperatura',
-  //         data: [22, 29, 21, 24, 14, 23, 31],
-  //         borderwidht: 1,
-  //         fill: false,
-  //         tension: 0.1,
-  //         pointStyle: 'circle',
-  //         backgroundColor: '#ffd166',
-  //         borderColor: '#ffd166'
-  //       },
-  //       ],
-  //     },
-  //     options: {
-  //       scales: {
-  //         xAxes: [
-  //           {
-  //             distribution: "series",
-  //             ticks: {
-  //               beginAtZero: true,
-  //             },
-  //           },
-  //         ],
-  //         yAxes: [
-  //           {
-  //             scaleLabel: {
-  //               display: true,
-  //               labelString: "Temperatura",
-  //             },
-  //             ticks: {
-  //               beginAtZero: true,
-  //             },
-  //           },
-  //         ],
-  //       },
-  //       animation: {
-  //         duration: 0,
-  //       },
-  //     },
-  //   });
-
   }
     
-  
   let graficoBar;
   function obterDadosGraficoBar() {
     fetch(`/medidas/buscarResultadoGraficoBar/${sessionStorage.FK_EMPRESA}`, {
@@ -463,8 +382,8 @@
     return false;
   }
 
-  function atualizarGraficoBar(dados) {
-    console.log("Dados recebidos para o gráfico de Barra:", dados);
+  function atualizarGraficoBar(dadosBar) {
+    console.log("Dados recebidos para o gráfico de Barra:", dadosBar);
 
     const ctx = document.getElementById('lm35Temperatura');
 
@@ -472,53 +391,68 @@
       graficoBar.destroy();
     }
 
-    const passos = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho'];
+    const meses = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho'];
 
-    // Inicializamos os arrays para cada faixa de temperatura com zeros
-    const abaixoDaMedia = [0, 0, 0, 0, 0, 0];
-    const naMedia = [0, 0, 0, 0, 0, 0];
-    const acimaDaMedia = [0, 0, 0, 0, 0, 0];
 
-    if (dados[0]) {
-      if (dados[0].MediaAbaixo22 !== undefined) {
-        abaixoDaMedia[5] = dados[0].MediaAbaixo22;
-      }
-      if (dados[0].MediaEntre22e29 !== undefined) {
-        naMedia[5] = dados[0].MediaEntre22e29;
-      }
-      if (dados[0].MediaAcima29 !== undefined) {
-        acimaDaMedia[5] = dados[0].MediaAcima29;
-      }
-    }
-
-    graficoBar = new Chart(ctx, {
-      type: 'bar',
-      data: {
-        labels: passos,
+    // let HabitatsAbaixo22 = []
+    // let HabitatsEntre22e29 = []
+    // let HabitatsAcima29 = []
+    
+    let dados = {
+        labels: ['Ultimo mês'],
         datasets: [
           {
             label: 'Abaixo da Média',
-            data: abaixoDaMedia,
+            data: [],
             backgroundColor: "#75b9d7",
             borderWidth: 1,
             tension: 0.1
           },
           {
             label: "Na média",
-            data: naMedia,
+            data: [],
             borderWidth: 1,
             backgroundColor: "#ffd166"
           },
           {
             label: "Acima da média",
-            data: acimaDaMedia,
+            data: [],
             borderWidth: 1,
             backgroundColor: '#fd2828'
           }
         ]
-      },
+      }
+
+      for (i = 0; i < dadosBar.length; i++) {
+            var registro = dadosBar[i];
+            dados.datasets[0].data.push(registro.HabitatsAbaixo22);
+            dados.datasets[1].data.push(registro.HabitatsEntre22e29);
+            dados.datasets[2].data.push(registro.HabitatsAcima29);
+        }
+
+  
+    graficoBar = new Chart(ctx, {
+      type: 'bar',
+      data: dados,
       responsive: true,
       options: {
+        scales: {
+                        xAxes: [{
+                            distribution: 'series',
+                            ticks: {
+                                beginAtZero: true
+                            }
+                        }],
+                        yAxes: [{
+                            scaleLabel: {
+                                display: true,
+                                labelString: 'Temperatura'
+                            },
+                            ticks: {
+                                beginAtZero: true
+                            }
+                        }]
+                    },
         responsive: true,
         animation: false,
         plugins: {
@@ -540,16 +474,9 @@
   obterDadosGraficoBar();
   setInterval(obterDadosGraficoBar, 100000);
 
-
-
-
-
-
-
-
   let graficoPie;
   function obterDadosGraficoPie() {
-    fetch(`/medidas/buscarResultadoGraficoBar/${sessionStorage.FK_EMPRESA}`, {
+    fetch(`/medidas/buscarResultadoGraficoPie/${sessionStorage.FK_HABITAT}`, {
       method: "GET"
     }).then(function (resposta) {
       if (resposta.ok) {
@@ -562,13 +489,13 @@
       }
 
     })
-      .then(function (data) {
-        if (data.length === 0) {
+      .then(function (dataPie) {
+        if (dataPie.length === 0) {
           console.warn("Nenhum resultado encontrado");
           return;
         }
 
-        atualizarGraficoPie(data);
+        atualizarGraficoPie(dataPie);
       })
       .catch(function (erro) {
         console.log(erro);
@@ -577,8 +504,8 @@
     return false;
   }
 
-  function atualizarGraficoPie(dados) {
-    console.log("Dados recebidos para o gráfico de Pizza:", dados);
+  function atualizarGraficoPie(dadosPie) {
+    console.log("Dados recebidos para o gráfico de Pizza:", dadosPie);
 
     const ctx = document.getElementById('luminosidade');
 
@@ -586,100 +513,48 @@
       graficoPie.destroy();
     }
 
-    const passos = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho'];
 
-    // Inicializamos os arrays para cada faixa de temperatura com zeros
-    const abaixoDaMedia = [0, 0, 0, 0, 0, 0];
-    const naMedia = [0, 0, 0, 0, 0, 0];
-    const acimaDaMedia = [0, 0, 0, 0, 0, 0];
 
-    if (dados[0]) {
-      if (dados[0].MediaAbaixo22 !== undefined) {
-        abaixoDaMedia[5] = dados[0].MediaAbaixo22;
-      }
-      if (dados[0].MediaEntre22e29 !== undefined) {
-        naMedia[5] = dados[0].MediaEntre22e29;
-      }
-      if (dados[0].MediaAcima29 !== undefined) {
-        acimaDaMedia[5] = dados[0].MediaAcima29;
-      }
-    }
+
+    const medias = Object.values(dadosPie[0]).map(Number); 
 
     graficoPie = new Chart(ctx, {
-      type: 'pie',
+      type: "pie",
       data: {
-        labels: passos,
+        labels: [
+          "Abaixo da média",
+          "Na média",
+          "Acima da média"
+        ],
         datasets: [
           {
-            label: 'Abaixo da Média',
-            data: abaixoDaMedia,
-            backgroundColor: "#75b9d7",
-            borderWidth: 1,
-            tension: 0.1
+            label: "Luminosidade",
+            data: medias,
+            borderwidht: 1,
+            backgroundColor: ["#75b9d7", "#ffd166", "#ff4d4d"],
+            borderColor: ["#75b9d7", "#ffd166", "#ff4d4d"]
           },
-          {
-            label: "Na média",
-            data: naMedia,
-            borderWidth: 1,
-            backgroundColor: "#ffd166"
-          },
-          {
-            label: "Acima da média",
-            data: acimaDaMedia,
-            borderWidth: 1,
-            backgroundColor: '#fd2828'
-          }
-        ]
+        ],
       },
-      responsive: true,
       options: {
-        responsive: true,
-        animation: false,
-        plugins: {
-          legend: {
-            labels: {
-              color: 'black'
-            }
-          },
-          y: {
-            ticks: {
-              color: 'black'
-            }
-          }
-        }
-      }
+        scales: {
+          xAxes: [
+          ],
+          yAxes: [
+
+          ],
+        },
+        animation: {
+          duration: 0,
+        },
+      },
     });
   }
 
   obterDadosGraficoPie();
   setInterval(obterDadosGraficoPie, 100000);
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+  //Graficos do habitat filtrado
   let graficoBarLuminVariacao;
     function obterDadosGraficoBarLuminHabi() {
       var fk_empresa = sessionStorage.FK_EMPRESA;
@@ -712,33 +587,58 @@
       return false;
     }
 
-    function atualizarGraficoBarLuminHabi(dados) {
-      console.log("Dados recebidos para o gráfico de Barra:", dados);
+    function atualizarGraficoBarLuminHabi(dadosHabi) {
+      console.log("Dados recebidos para o gráfico de Barra:", dadosHabi);
 
       const ctxHabi = document.getElementById(`luminosidadeHabi`);
-
       if (graficoBarLuminVariacao) {
         graficoBarLuminVariacao.destroy();
       }
 
-      const VetorHab = Object.values(dados[0]).map(Number);
-      const passos = ["13H"];
+      const labels = [];
+
+      let dados = {
+          labels: labels,
+          datasets: [{
+            label: 'temperatura',
+            data: [],
+
+            backgroundColor:
+              '#548D3D'
+            ,
+            borderColor: '#548D3D',
+            tension: 0.1
+          }]
+        }
+
+        for (i = 0; i < dadosHabi.length; i++) {
+            var registro = dadosHabi[i];
+            labels.push(registro.momento_grafico);
+            dados.datasets[0].data.push(registro.luminosidade);
+        }
+
+
 
       graficoBarLuminVariacao = new Chart(ctxHabi, {
         type: 'bar',
-        data: {
-          labels: ["13H"],
-          datasets: [{
-            label: 'luminocidade',
-            data: VetorHab,
-
-            backgroundColor:
-              '#fd2828'
-            ,
-            borderColor: '#fd2828',
-            tension: 0.1
-          }]
-        },
+        data: dados,
+        scales: {
+                        xAxes: [{
+                            distribution: 'series',
+                            ticks: {
+                                beginAtZero: true
+                            }
+                        }],
+                        yAxes: [{
+                            scaleLabel: {
+                                display: true,
+                                labelString: 'Temperatura'
+                            },
+                            ticks: {
+                                beginAtZero: true
+                            }
+                        }]
+                    },
         responsive: true,
         options: {
           responsive: true,
@@ -763,12 +663,11 @@
     obterDadosGraficoBarLuminHabi();
     setInterval(obterDadosGraficoBarLuminHabi, 5000);
 
-
     let graficoLineTempVariacao;
     function obterDadosGraficoLineTempHabi() {
-      var fk_empresa = sessionStorage.FK_EMPRESA;
+      var fk_habitat = sessionStorage.FK_HABITAT;
 
-      fetch(`/medidas/buscarResultadoGraficoBarLumin/${fk_empresa}`, {
+      fetch(`/medidas/buscarResultadoGraficoLineTemp/${fk_habitat}`, {
         method: "GET"
       }).then(function (resposta) {
         if (resposta.ok) {
@@ -782,10 +681,10 @@
 
       })
         .then(function (data) {
-          if (data.length === 0) {
-            console.warn("Nenhum resultado encontrado");
-            return;
-          }
+          // if (data.length === 0) {
+          //   console.warn("Nenhum resultado encontrado");
+          //   return;
+          // }
 
           atualizarGraficoLineTempHabi(data);
         })
@@ -796,54 +695,51 @@
       return false;
     }
 
-    function atualizarGraficoLineTempHabi(dados) {
-      console.log("Dados recebidos para o gráfico de LIne:", dados);
+    function atualizarGraficoLineTempHabi(dadosTemp) {
+      console.log("Dados recebidos para o gráfico de LIne:", dadosTemp);
 
       const ctxHabiTemp = document.getElementById(`lm35TemperaturaHabi`);
 
       if (graficoLineTempVariacao) {
         graficoLineTempVariacao.destroy();
       }
+  
+      const labels = [];
 
-      const VetorHab = Object.values(dados[0]).map(Number);
-      const passos = ["13H"];
-
-      graficoLineTempVariacao = new Chart(ctxHabiTemp, {
-        type: 'line',
-        data: {
-          labels: ["13H"],
+       let dados = {
+          labels: labels ,
           datasets: [{
-            label: 'luminocidade',
-            data: VetorHab,
+            label: 'luminosidade',
+            data: [],
 
             backgroundColor:
-              '#fd2828'
+              '#548D3D'
             ,
-            borderColor: '#fd2828',
+            borderColor: '#548D3D',
             tension: 0.1
           }]
-        },
+        }
+
+
+        for (i = 0; i < dadosTemp.length; i++) {
+            var registro = dadosTemp[i];
+            labels.push(registro.momento_grafico);
+            dados.datasets[0].data.push(registro.temperatura);
+        }
+
+
+
+        graficoLineTempVariacao = new Chart(ctxHabiTemp, {
+        type: 'line',
+        data: dados,
         responsive: true,
         options: {
           responsive: true,
           animation: false,
-          plugins: {
-            legend: {
-              labels: {
-                color: 'black'
-              }
-            },
-            y: {
-              ticks: {
-                color: 'black'
-              }
-            }
-          }
+          fill: true,
         }
       });
     }
-
-
     obterDadosGraficoLineTempHabi();
     setInterval(obterDadosGraficoLineTempHabi, 5000);
 

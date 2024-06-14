@@ -52,7 +52,6 @@ CREATE TABLE habitatAnimal (
 );
 
 
-
 CREATE TABLE Medidas(
 	idMedidas INT AUTO_INCREMENT,
     LeituraLumi DECIMAL(5,2) NULL,
