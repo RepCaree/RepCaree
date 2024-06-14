@@ -27,12 +27,11 @@ const serial = async (
         {
             // altere!
             // Credenciais do banco de dados
-            host: 'localhost',            //Na máquina virtual devo pegar o IP da nova máquina.
-            user: 'sptech', // ReptiHabitatSolution
-            password: 'sada1613', // 
+            host: '10.18.35.31',            //Na máquina virtual devo pegar o IP da nova máquina.
+            user: 'RHS', // ReptiHabitatSolution
+            password: 'Repti@123', // 
             database: 'ReptiHabitatSolutions',
-            port: 3306
-        }
+            port: 3307        }
     ).promise();
 
     // Lista as portas seriais disponíveis e procura pelo Arduino

@@ -366,7 +366,9 @@
 
   function mudarDash() {
     atualizarKPIs();
-    tituloAlt.innerHTML = "Habitat 5"
+    const idHabitat = sessionStorage.FK_HABITAT;
+
+    tituloAlt.innerHTML = `Habitat ${idHabitat}`
     tituloDash.style.display = 'none'
     KPI1.style.display = 'none'
     KPI2.style.display = 'none'
