@@ -379,7 +379,7 @@ input[type="search"]::-webkit-search-cancel-button:after {
   display: none;
   background-color: #ABABAB;
   width: 400px;
-  height: 100px;
+  height: 130px;
   position: absolute;
   z-index: 1000;
   right: 50px;
@@ -387,20 +387,20 @@ input[type="search"]::-webkit-search-cancel-button:after {
   padding: 20px;
   background-color: #70b447be;
   box-shadow: 2px 5px 15px rgba(0, 0, 0, 0.5);
-  border: 2px solid black;
+  border: 2px solid rgb(105, 105, 105);
+ 
 }
 
-
-
-/* O botão de fechar (x)
 .close-popup {
   color: #000000;
   font-size: 28px;
   font-weight: bold;
-  position: relative;
+  position: absolute;
+  top: 0;
   bottom: 1rem;
   cursor: pointer;
-}
+} 
+/*
 #popupLink{
   z-index: 10;
   position: relative;

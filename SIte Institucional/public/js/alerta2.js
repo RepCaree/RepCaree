@@ -45,21 +45,30 @@ function mudarKPIMedias() {
 
     const spanTemp = document.querySelector('.divTextoKPI3 span');
     const spanLumin = document.querySelector('.divTextoKPI4 span');
-    // var span_temp = document.querySelectorAll('media-temp');
-    // var span_media_lumi = document.getElementById('divTextoKPI');
+
 
     if (mediaTemp < 22 || mediaTemp > 29) {
         spanTemp.style.color = 'red';
         console.log('Temperatura fora do intervalo');
-     
-    }else{
+
+        imgTemp1.style.display = 'none'
+        imgTemp2.style.display = 'block'
+    } else {
         spanTemp.style.color = '#548D3D';
+
+        imgTemp1.style.display = 'block'
+        imgTemp2.style.display = 'none'
     }
-     if (mediaLumin < 400 || mediaLumin > 800) {
+    if (mediaLumin < 400 || mediaLumin > 800) {
         spanLumin.style.color = 'red';
         console.log('Luminosidade fora do intervalo');
+
+        imgLumin1.style.display = 'none'
+        imgLumin2.style.display = 'block'
     } else {
         spanLumin.style.color = '#548D3D';
+        imgLumin1.style.display = 'block'
+        imgLumin2.style.display = 'none'
     }
 }
 function avaliarMetrica() {
@@ -71,12 +80,24 @@ function avaliarMetrica() {
     const acimaLumin = 800;
     const abaixoLumin = 400;
     mudarCorKPI()
-    if (temp <= abaixoTemp || temp >= acimaTemp) {
+
+     if((temp <= abaixoTemp || temp >= acimaTemp )&& (lumin > acimaLumin || lumin < abaixoLumin)){
         const habitatLista = document.getElementById('nomeHabitat')
         habitatLista.style.color = 'red'
         document.getElementById('habitatAlerta').innerHTML = `
-                Alerta no Habitat ${id_habitat} <br>
-                Temperatura fora da média
+            <h3 style=" text-align: center; color:#ffee00; font-size: 22px;";>Alerta Máximo<h3><br>
+                <span style="text-align: center;";>A Temperatura e Luminosidade no <span style="color: red;">habitat ${id_habitat}</span> estão fora da faixa ideal!</span>
+        
+            `
+        mostrarAlerta();
+        mudarCorKPI()
+    }
+   else  if (temp <= abaixoTemp || temp >= acimaTemp) {
+        const habitatLista = document.getElementById('nomeHabitat')
+        habitatLista.style.color = 'red'
+        document.getElementById('habitatAlerta').innerHTML = `
+                <h3 style=" text-align: center; color:#ffee00; font-size: 20px;";> Alerta de Temperatura<h3><br>
+                <span style="text-align: center;";>A temperatura no <span style="color: red;">habitat ${id_habitat}</span> está fora da faixa ideal!</span>
                 `
         mostrarAlerta();
         mudarCorKPI()
@@ -87,8 +108,9 @@ function avaliarMetrica() {
         const habitatLista = document.getElementById('nomeHabitat')
         habitatLista.style.color = 'red'
         document.getElementById('habitatAlerta').innerHTML = `
-            Alerta no Habitat ${id_habitat} <br>
-            Luminosidade fora da média
+            <h3 style=" text-align: center; color:#ffee00; font-size: 20px;";> Alerta de Luminosidade<h3><br>
+                <span style="text-align: center;";>A Luminosidade no <span style="color: red;">habitat ${id_habitat}</span> está fora da faixa ideal!</span>
+        
             `
         mostrarAlerta();
         mudarCorKPI()
@@ -99,8 +121,6 @@ function avaliarMetrica() {
         habitatLista.style.color = '#548D3D'
 
     }
-
-
 }
 
 function mostrarAlerta() {
@@ -125,10 +145,15 @@ function mudarCorKPI() {
     const kpiLumin = document.getElementById('medidasAtuaisTempLumin2');
     if (temp < 22 || temp > 29) {
         kpiTemp.style.color = 'red'
-    } else if (lumin < 400 || lumin > 800) {
+    } else {
+  kpiTemp.style.color = '#548D3D'
+    }
+     if (lumin < 400 || lumin > 800) {
         kpiLumin.style.color = 'red'
     } else {
-        kpiTemp.style.color = '#548D3D'
+      
         kpiLumin.style.color = '#548D3D'
     }
 }
+
+

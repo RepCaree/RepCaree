@@ -28,7 +28,9 @@
 <body>
   <!--  inicio do menu da dashboard  -->
   <div class="meuPopup" id="meuPopup">
-    <span id="habitatAlerta"></span>
+    <span id="habitatAlerta">
+    
+    </span>
     <span class="close-popup">x</span>
   </div>
 <!--teste-->
@@ -145,7 +147,8 @@
         <div class="div_KPI" id="KPI3"><span class="spanTitulo3">Média da Temperatura</span>
           <div class="div_KPI3content">
             <div class="divTextoKPI3">
-              <img src="./IMG/Dashboard/temperatura-alta.png" alt="">
+              <img id="imgTemp1" src="./IMG/Dashboard/temperatura-alta.png" alt="">
+              <img id="imgTemp2" style="display: none;" src="./IMG/1718338298499.png" alt="">
               <span id="span_media_temp" class="span_media_temp"></span>
             </div>
           </div>
@@ -154,7 +157,8 @@
           <span class="spanTitulo4">Média da Luminosidade</span>
           <div class="div_KPI4content">
             <div class="divTextoKPI4">
-              <img src="./IMG/Dashboard/temperaturas.png" alt="">
+              <img id="imgLumin1" src="./IMG/Dashboard/temperaturas.png" alt="">
+              <img id="imgLumin2" style="display: none;" src="./IMG/Design sem nome (1) (1).png" alt="">
               <span id="span_media_lumi" class="span_media_lumi"></span>
             </div>
           </div>
@@ -275,16 +279,18 @@
           porcetagemAlertas1 = Math.abs(porcetagemAlertas);
           idHabitatAlerta1 = idHabitatAlerta;
           idHabitatAlerta2Ultmos1 = idHabitatAlerta2Ultmos;
+        
+          
 
-          console.log(porcetagemAlertas);
         }
+        
         sessionStorage.MEDIA_ATUALTEMP = mediaAtualTemp1;
         sessionStorage.MEDIA_ATUALLUMIN = mediaAtualLumin1;
         sessionStorage.ID_HABITAT_ALERTA = idHabitatAlerta1;
         sessionStorage.DADO_ULTIMO_ALERTA = ultimoAlerta1;
         sessionStorage.MEDIA_GERAL_TEMP = mediaTemperatura;
         sessionStorage.MEDIA_GERAL_LUMIN = mediaLuminocidade;
-
+        
         document.getElementById('span_media_temp').innerHTML = `<span>${mediaTemperatura} °C</span>`;
         document.getElementById('span_media_lumi').innerHTML = `<strong><span>${mediaLuminocidade} Lux</span></strong>`;
         document.getElementById('medidasAtuaisTempLumin').innerHTML = `<strong><span>${mediaAtualTemp1}°C </span></strong>`;
