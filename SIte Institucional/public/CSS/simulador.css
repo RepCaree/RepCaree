@@ -32,7 +32,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #B5E4AA70;
+    background-color: #2a82705b;
 }
 
 /* Container que contém todo o conteúdo */
@@ -45,7 +45,7 @@ body {
 /* Destalhes do titulo "CALCULE SEU PREJUÍZO" */
  .title {
     font-size: 50px;
-    color: #01493A;
+    color: #93dfd5a1;
     text-align: center;
     font-weight: 900;
     width: 80%;
@@ -56,8 +56,13 @@ body {
     position: relative;
     top: 135px; 
     left: 70px;
+    transition: ease-in-out 0.6s;
 } 
 
+.title:hover {
+    color: #01493A;
+    cursor: default;
+}
 
 
 
@@ -72,15 +77,15 @@ body {
 /* Container geral, contém os outros 2 containers(esquerdo e direito) */
 .containerFilhos {
     /* background-color: #2C5819; */
-    background-color: #01493A;
-    border-radius: 10px;
+    background-color:#003329c5;
+    border-radius: 1.4rem;
     /* Arredonda a borda em 15px */
     padding: 15px;
     /* Distãncia da bordao conteudo dentro */
     width: 70rem;
     display: flex;
-    color: #FFFFFF;
-    height: 520px;
+    color: #93dfd5;
+    height: 570px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -106,7 +111,9 @@ body {
     align-items: center;
     /* justify-content: center; */
     flex-direction: column;
-    background-color: #B5E4AAA8;
+    /* background-color: #548d3d63; */
+    /* background-color: #cffa9e65; */
+    background-color: #3593829f;
     margin-left: 50px;
 
 }
@@ -120,12 +127,13 @@ body {
 .conteudo input {
     background-color: transparent;
     border: none;
-    border-bottom: 1px solid #73916C;
+    border-bottom: 1px solid #93dfd5a1;
     /* Estiliza somente a borda inferior para que fique como uma linha */
     width: 90%;
     padding: 10px;
     font-size: 16px;
     outline: none;
+    padding-left: 12px;
     /* Define que não terá borda na input */
 }
 
@@ -138,25 +146,26 @@ body {
 .btn button {
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     /* background-color: #77BD1F; */
-    background-color: #B5E4AAA8;
+    background-color: #2a8270b5;
     width: 16rem;
-    color: white;
+    color: #93dfd5;
     border: none;
+    height: 55px;
     padding: 15px;
     margin-top: -8px;
     /* margin-bottom: -30px; */
     /* Distãncia da borda do botão para o que esta escrito nele */
-    border-radius: 16px;
+    border-radius: 18px;
     /* Arredonda a borda em 16px */
     font-weight: 900;
     /* Torna a grossura da fonte em bold 900 */
     font-size: 14px;
+    transition: ease-in-out 0.5s;
 }
 
 .btn button:hover {
-    background-color: #B5E4AA;
-    color: #4B5E46;
-    transition: all 0.5s;
+    background-color: #93dfd599;
+    color: #003329;
     cursor: pointer;
 }
 
@@ -178,11 +187,11 @@ body {
 }
 
 .question select {
-    background-color: #B5E4AAA8;
+    background-color: #2a8270c9;
     border-radius: 3rem;
     width: 280px;
-    height: 2rem;
-    color: #01493A;
+    height: 2.3rem;
+    color: #ffffffc6;
     text-align: center;
     font-size: 18px;
     outline: none;
@@ -199,7 +208,8 @@ body {
 }
 
 .conteudo input:not(:placeholder-shown) {
-    background-color: #B5E4AAA8;
+    background-color: #2a8270c9;
+    border-bottom: none;
     transition: all 0.3s;
     border-radius: 5rem;
 }
@@ -257,7 +267,7 @@ body {
 
 /* Conteúdo do modal */
 .modal-content {
-    background-color: #FEFEFE;
+    background-color: #93dfd5;
     border-radius: 10px;
     margin: 15% auto;
     padding: 20px;
@@ -284,4 +294,14 @@ body {
     text-decoration: none;
     cursor: pointer;
     
+}
+
+.Error {
+    display: flex;
+    justify-content: center;
+    margin-top: 9rem;
+    font-size: 20px;
+    text-align: center;
+    margin-left: 15px;
+    color: #cffa9ebc;
 }

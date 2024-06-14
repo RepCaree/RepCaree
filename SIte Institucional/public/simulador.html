@@ -71,39 +71,47 @@
                     <button onclick="calcularPreju()">CALCULAR PREJUÍZO</button>
                 </div>
 
-                <div id="error" style="display: none;"></div>
                 <button id="btn_Voltar" onclick="voltarCalculadora()" style="display: none;"> Voltar </button>
             </div>
             <div class="containerFilho2">
                 <!-- Container da direita, contém a imagem até que o cliente clique no botão, ao clicar, a imagem é oculta e aparece a resposta -->
                 <!-- div que será puxada pelo innerHTML, para que apareça a resposta -->
                 <div id="mensagemResultado">
-                    <h2 class="title" style="cursor: pointer; text-decoration: none;">SIMULADOR FINANCEIRO</h2>
+                    <h2 class="title">SIMULADOR FINANCEIRO</h2>
+                    <div class="Error" id="error"></div>
                     <!-- Imagem antes do cliente clicar no botão -->
+
                 </div>
             </div>
         </div>
 
-        <div id="myModal" class="modal" style="overflow: hidden;">   
+        <div id="myModal" class="modal" style="overflow: hidden;">
             <div class="modal-content">
                 <span class="close">&times;</span>
-                <p>Cada região possui sua variação se temperatura específica, com suas características e ambientes. Devido a isso, a quantidade de lâmpadas por região pode variar, para assim, tornar o habitat do réptil mais agradável.
+                <p>Cada região possui sua variação se temperatura específica, com suas características e ambientes.
+                    Devido a isso, a quantidade de lâmpadas por região pode variar, para assim, tornar o habitat do
+                    réptil mais agradável.
                 </p>
             </div>
         </div>
-        <div id="myModal2" class="modal" style="overflow: hidden;">   
+        <div id="myModal2" class="modal" style="overflow: hidden;">
             <div class="modal-content">
                 <span class="close">&times;</span>
-                <p>Os répteis são ectotérmicos e dependem do calor externo para funcionar. Em frio, tornam-se inativos e podem morrer. Assim, o uso de lâmpadas é essencial para fornecer o calor necessário, considerando as seguintes características:
+                <p>Os répteis são ectotérmicos e dependem do calor externo para funcionar. Em frio, tornam-se inativos e
+                    podem morrer. Assim, o uso de lâmpadas é essencial para fornecer o calor necessário, considerando as
+                    seguintes características:
                     <br>
-                    <b>- Lâmpadas Comuns:</b> Fornecem iluminação básica e calor para répteis, criando um ciclo dia/noite adequado e gerando aquecimento.
+                    <b>- Lâmpadas Comuns:</b> Fornecem iluminação básica e calor para répteis, criando um ciclo
+                    dia/noite adequado e gerando aquecimento.
                     <br>
-                    <b>- Lâmpadas UVA:</b> Influencia no comportamento dos répteis, incluindo suas atividades em geral. Auxiliando os répteis a verem o ambiente de forma mais natural, semelhante à luz do sol.
+                    <b>- Lâmpadas UVA:</b> Influencia no comportamento dos répteis, incluindo suas atividades em geral.
+                    Auxiliando os répteis a verem o ambiente de forma mais natural, semelhante à luz do sol.
                     <br>
-                    <b>- Lâmpadas UVB:</b> Evitam que se desenvolva deficiências que afetam seus ossos e saúde geral, sendo crucial para a saúde dos répteis, pois permite a síntese de vitamina D3 em sua pele.
+                    <b>- Lâmpadas UVB:</b> Evitam que se desenvolva deficiências que afetam seus ossos e saúde geral,
+                    sendo crucial para a saúde dos répteis, pois permite a síntese de vitamina D3 em sua pele.
                 </p>
             </div>
-        
+
         </div>
     </div>
 </body>
@@ -130,20 +138,12 @@
         let qtdLampadas = 0
 
         if (qtd_Repteis == '') {
-            // em caso de alert:
-            alert("Insira a quantidade de répteis")
-
-            // em caso de inner:
             error.style.display = 'block'
             error.innerHTML = `Insira a quantidade de répteis.`
             setTimeout(function () {
                 error.style.display = 'none'
             }, 2500);
         } else if (selecaoRegiao == 'vazio') {
-            // em caso de alert:
-            alert("Informe uma região")
-
-            // em caso de inner:
             error.style.display = 'block'
             error.innerHTML = `Informe uma região.`
             setTimeout(function () {
@@ -151,20 +151,12 @@
             }, 2500);
 
         } else if (selecao == 'vazio') {
-            // em caso de alert:
-            alert("Selecione uma opção de iluminação")
-
-            // em caso de inner:
             error.style.display = 'block'
             error.innerHTML = `Selecione uma opção de iluminação`
             setTimeout(function () {
                 error.style.display = 'none'
             }, 2500);
         } else if (selecao == 'yes' && uvaCheck === false && uvbCheck === false && comumCheck === false) {
-            // em caso de alert:
-            alert("Selecione uma lâmpada")
-
-            // em caso de inner:
             error.style.display = 'block'
             error.innerHTML = `Selecione uma lâmpada`
             setTimeout(function () {
@@ -186,13 +178,14 @@
                 }
 
                 mensagemResultado.style.display = 'block'
-                mensagemResultado.innerHTML = `<p style= "font-size: 21px; color:#292828">
-                A região selecionada é <b>${selecaoRegiao}</b>, onde sua média de temperatura varia de <span  style= "color: red;font-weight: bold;font-family: sans-serif;font-size: 30px;text-shadow: 2px 2px black;" id="mediaRegiao"></a></span>
+                mensagemResultado.innerHTML = `<p style= "font-size: 21px; color:#ffffffd3; padding: 9px; margin-top: 20px;">
+                A região selecionada é <b>${selecaoRegiao}</b>, onde sua média de temperatura varia de <span  style= "color: #cffa9e;font-weight: bold;font-family: sans-serif;font-size: 30px;text-shadow: 2px 2px black;" id="mediaRegiao"></a></span>
                 <br><br>
                 <b>Situação</b>: <a id="tipoLampada"></a>
                 <br>
                 <br>
-                <u>Sem um sistema de monitoramento adequado</u>, a saúde e segurança do seu réptil é comprometida, resultando em um <u>gasto anual</u> de cerca de <i style= "color: red;font-weight: bold;font-family: sans-serif;font-size: 30px;text-shadow: 2px 2px black;"><b>R$ ${(valorLampadas * qtdLampadas) * qtd_Repteis}</b></i> em lâmpadas, além de um significativo desperdício de recursos.  </p> <br>`
+                <u>Sem um sistema de monitoramento adequado</u>, a saúde e segurança do seu réptil é comprometida, resultando em um <u>gasto anual</u> de cerca de <i style= "color: #cffa9e;font-weight: bold;font-family: sans-serif;font-size: 30px;text-shadow: 2px 2px black;"><b>R$ ${(valorLampadas * qtdLampadas) * qtd_Repteis}</b></i> em lâmpadas, além de um significativo desperdício de recursos.  </p> <br>
+                `
 
                 if (selecaoRegiao === "Centro-Oeste") {
                     mediaRegiao.innerHTML = "21°C a 27°C"
@@ -225,16 +218,16 @@
 
             } else if (selecao === "no") {
                 mensagemResultado.style.display = 'block'
-                mensagemResultado.innerHTML = `<p style= "font-size: 20px; color:#292828">
-                A região selecionada é <b>${selecaoRegiao}</b>, onde sua média de temperatura varia de <span style= "color: red;font-weight: bold;font-family: sans-serif;font-size: 30px;text-shadow: 2px 2px black;" id="mediaRegiao"></span>
+                mensagemResultado.innerHTML = `<p style= "font-size: 19px; color:#ffffffd3; padding: 4px;">
+                A região selecionada é <b>${selecaoRegiao}</b>, onde sua média de temperatura varia de <span style= "color: #cffa9e;font-weight: bold;font-family: sans-serif;font-size: 30px;text-shadow: 2px 2px black;" id="mediaRegiao"></span>
                 <br><br>
-                <b>Situação</b>: É indicado que adquira lâmpadas de iluminação <a id="ModalLampadas"><b>UVA</b> e <b>UVB</b></a>, custando aproximadamente <b><i style= "color: red;font-weight: bold; font-family: sans-serif; font-size: 30px; text-shadow: 2px 2px black"><a id="tipoLampada">R$ ${700 * qtd_Repteis}x</a>.</i></b>
+                <b>Situação</b>: É indicado que adquira lâmpadas de iluminação <a id="ModalLampadas"><b>UVA</b> e <b>UVB</b></a>, custando aproximadamente <b><i style= "color: #cffa9e;font-weight: bold; font-family: sans-serif; font-size: 30px; text-shadow: 2px 2px black"><a id="tipoLampada">R$ ${700 * qtd_Repteis}</a>.</i></b>
                 <br>
                 <br>
                 Contudo, <u>sem o monitoramento adequado</u>, elas tendem a desgastar mais facilmente, alterando a temperatura, encurtando sua vida útil, gerando <u>mais gastos</u> na sua substituição e mais lixos tóxicos.
-        
+            
                 <br><br>
-                <u>Utilizando nossos sensores</u>, é notório um aumento de até <i style= "color: red;font-weight: bold;font-family: sans-serif; font-size: 30px; text-shadow: 2px 2px black">30%</i> de longevidade dessas lâmpadas, preservando assim o habitat e a saúde de seus répteis, além de um maior controle a respeito da temperatura do ambiente e <u>redução de gastos!</u>
+                <u>Utilizando nossos sensores</u>, é notório um aumento de até <i style= "color: #cffa9e;font-weight: bold;font-family: sans-serif; font-size: 30px; text-shadow: 2px 2px black">30%</i> de longevidade dessas lâmpadas, preservando assim o habitat e a saúde de seus répteis, além de um maior controle a respeito da temperatura do ambiente e <u>redução de gastos!</u>
                 </p>
                 `
 
@@ -288,7 +281,7 @@
         span2.onclick = function () {
             modal2.style.display = "none";
         }
-        
+
 
         // Quando o usuário clica fora do modal, fecha o modal
         window.onclick = function (event) {

@@ -57,11 +57,24 @@ nav a:hover {
 .aboutUs {
   color: white;
   padding: 200px;
-  width: 900px;
-
+  /* width: 900px; */
+  display: flex;
+  align-items: center;
+  width: 100%;
+  flex-direction: row;
 }
 
+.texto{
+  text-align: justify;
+  width: 50%;
+  margin-right: 215px;
+  
+}
 
+.aboutUs .logo {
+  align-items: center;
+  justify-content: center;
+}
 
 /* Texto e título "NOSSA HISTÓRIA" */
 .window2 {
@@ -113,6 +126,11 @@ nav a:hover {
   padding: 30px;
   flex-direction: row;
   justify-content: space-between;
+}
+
+.txtCard {
+  text-align: justify;
+  font-size: 16px;
 }
 
 .card img {

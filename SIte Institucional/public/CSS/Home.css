@@ -85,7 +85,8 @@
       justify-content: center;
       background-color: #003329;
       flex-direction: column;
-    font-family: 'Poppins';
+      font-family: 'Poppins';
+      margin-top: 15px;
   }
 
   .div_texto_inicial {
@@ -100,7 +101,8 @@
       line-height: 1.8em;
   }
   .div_texto_inicial h1{
-    margin-bottom: 7px;
+    margin-bottom: 22px;
+    
   }
   /* estilização do botão da tela inicial*/
   .div_button{
@@ -251,6 +253,9 @@
     transition: all 1s linear; /*Deixa a animação mais fluida*/
     height: 400px;
   }
+
+ 
+
   .card__container {
     padding: 16px;
   }
@@ -288,12 +293,12 @@
     height: 12px;
     /*background-color: #f7f;*/
     position: absolute;
-
     text-decoration: none;
     background-image: url('/IMG/Home_fundo/check.png');
     background-repeat: no-repeat;
     background-size: 12px 12px;
   }
+
   /* .::. Flex box .::.*/
   .flex {
     display: flex;
@@ -405,11 +410,10 @@
   /*contem os textos das perguntas*/
   .text_pergunta {
       display: flex;
-      /* align-items: center; */
+      text-align: justify;
       padding: 10px;
       font-size: 15px;
       color: #FFFFFF;
-    text-align: start;
   }
 
   /*comtem o nome da pergunta*/
@@ -420,9 +424,9 @@
       font-size: 18px;
       padding: 5px 6px;
   }
+  
   /*criando a seta*/
   .setaBorda{
-    
     position: relative;
     left: 95%;
     bottom: 15%;
