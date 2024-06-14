@@ -366,8 +366,8 @@
     return false;
   }
 
-  function atualizarGraficoBar(dados) {
-    console.log("Dados recebidos para o gráfico de Barra:", dados);
+  function atualizarGraficoBar(dadosBar) {
+    console.log("Dados recebidos para o gráfico de Barra:", dadosBar);
 
     const ctx = document.getElementById('lm35Temperatura');
 
@@ -375,53 +375,67 @@
       graficoBar.destroy();
     }
 
-    const passos = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho'];
+    const meses = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho'];
 
-    // Inicializamos os arrays para cada faixa de temperatura com zeros
-    const abaixoDaMedia = [0, 0, 0, 0, 0, 0];
-    const naMedia = [0, 0, 0, 0, 0, 0];
-    const acimaDaMedia = [0, 0, 0, 0, 0, 0];
 
-    if (dados[0]) {
-      if (dados[0].MediaAbaixo22 !== undefined) {
-        abaixoDaMedia[5] = dados[0].MediaAbaixo22;
-      }
-      if (dados[0].MediaEntre22e29 !== undefined) {
-        naMedia[5] = dados[0].MediaEntre22e29;
-      }
-      if (dados[0].MediaAcima29 !== undefined) {
-        acimaDaMedia[5] = dados[0].MediaAcima29;
-      }
-    }
-
-    graficoBar = new Chart(ctx, {
-      type: 'bar',
-      data: {
-        labels: passos,
+    let HabitatsAbaixo22 = []
+    let HabitatsEntre22e29 = []
+    let HabitatsAcima29 = []
+    
+    let dados = {
+        labels: meses,
         datasets: [
           {
             label: 'Abaixo da Média',
-            data: abaixoDaMedia,
+            data: [],
             backgroundColor: "#75b9d7",
             borderWidth: 1,
             tension: 0.1
           },
           {
             label: "Na média",
-            data: naMedia,
+            data: [],
             borderWidth: 1,
             backgroundColor: "#ffd166"
           },
           {
             label: "Acima da média",
-            data: acimaDaMedia,
+            data: [],
             borderWidth: 1,
             backgroundColor: '#fd2828'
           }
         ]
-      },
+      }
+
+    for (i = 0; i < dadosBar.length; i++) {
+            var registro = dadosBar[i];
+            dados.datasets[0].data.push(registro.HabitatsAbaixo22);
+            dados.datasets[1].data.push(registro.HabitatsEntre22e29);
+            dados.datasets[2].data.push(registro.HabitatsAcima29);
+        }
+
+    graficoBar = new Chart(ctx, {
+      type: 'bar',
+      data: dados,
       responsive: true,
       options: {
+        scales: {
+                        xAxes: [{
+                            distribution: 'series',
+                            ticks: {
+                                beginAtZero: true
+                            }
+                        }],
+                        yAxes: [{
+                            scaleLabel: {
+                                display: true,
+                                labelString: 'Temperatura'
+                            },
+                            ticks: {
+                                beginAtZero: true
+                            }
+                        }]
+                    },
         responsive: true,
         animation: false,
         plugins: {
@@ -445,7 +459,7 @@
 
   let graficoPie;
   function obterDadosGraficoPie() {
-    fetch(`/medidas/buscarResultadoGraficoBar/${sessionStorage.FK_EMPRESA}`, {
+    fetch(`/medidas/buscarResultadoGraficoPie/${sessionStorage.FK_EMPRESA}`, {
       method: "GET"
     }).then(function (resposta) {
       if (resposta.ok) {
@@ -458,13 +472,13 @@
       }
 
     })
-      .then(function (data) {
-        if (data.length === 0) {
+      .then(function (dataPie) {
+        if (dataPie.length === 0) {
           console.warn("Nenhum resultado encontrado");
           return;
         }
 
-        atualizarGraficoPie(data);
+        atualizarGraficoPie(dataPie);
       })
       .catch(function (erro) {
         console.log(erro);
@@ -473,8 +487,8 @@
     return false;
   }
 
-  function atualizarGraficoPie(dados) {
-    console.log("Dados recebidos para o gráfico de Pizza:", dados);
+  function atualizarGraficoPie(dadosPie) {
+    console.log("Dados recebidos para o gráfico de Pizza:", dadosPie);
 
     const ctx = document.getElementById('luminosidade');
 
@@ -482,68 +496,58 @@
       graficoPie.destroy();
     }
 
-    const passos = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho'];
+    
 
     // Inicializamos os arrays para cada faixa de temperatura com zeros
-    const abaixoDaMedia = [0, 0, 0, 0, 0, 0];
-    const naMedia = [0, 0, 0, 0, 0, 0];
-    const acimaDaMedia = [0, 0, 0, 0, 0, 0];
+    // const abaixoDaMedia = [0, 0, 0, 0, 0, 0];
+    // const naMedia = [0, 0, 0, 0, 0, 0];
+    // const acimaDaMedia = [0, 0, 0, 0, 0, 0];
 
-    if (dados[0]) {
-      if (dados[0].MediaAbaixo22 !== undefined) {
-        abaixoDaMedia[5] = dados[0].MediaAbaixo22;
-      }
-      if (dados[0].MediaEntre22e29 !== undefined) {
-        naMedia[5] = dados[0].MediaEntre22e29;
-      }
-      if (dados[0].MediaAcima29 !== undefined) {
-        acimaDaMedia[5] = dados[0].MediaAcima29;
-      }
-    }
+
+    const medias = Object.values(dadosPie[0]).map(Number); 
+
+    // if (dados[0]) {
+    //   if (dados[0].MediaAbaixo22 !== undefined) {
+    //     abaixoDaMedia[5] = dados[0].MediaAbaixo22;
+    //   }
+    //   if (dados[0].MediaEntre22e29 !== undefined) {
+    //     naMedia[5] = dados[0].MediaEntre22e29;
+    //   }
+    //   if (dados[0].MediaAcima29 !== undefined) {
+    //     acimaDaMedia[5] = dados[0].MediaAcima29;
+    //   }
+    // }
 
     graficoPie = new Chart(ctx, {
-      type: 'pie',
+      type: "pie",
       data: {
-        labels: passos,
+        labels: [
+          "Abaixo da média",
+          "Na média",
+          "Acima da média"
+        ],
         datasets: [
           {
-            label: 'Abaixo da Média',
-            data: abaixoDaMedia,
-            backgroundColor: "#75b9d7",
-            borderWidth: 1,
-            tension: 0.1
+            label: "Luminosidade",
+            data: medias,
+            borderwidht: 1,
+            backgroundColor: ["#75b9d7", "#ffd166", "#ff4d4d"],
+            borderColor: ["#75b9d7", "#ffd166", "#ff4d4d"]
           },
-          {
-            label: "Na média",
-            data: naMedia,
-            borderWidth: 1,
-            backgroundColor: "#ffd166"
-          },
-          {
-            label: "Acima da média",
-            data: acimaDaMedia,
-            borderWidth: 1,
-            backgroundColor: '#fd2828'
-          }
-        ]
+        ],
       },
-      responsive: true,
       options: {
-        responsive: true,
-        animation: false,
-        plugins: {
-          legend: {
-            labels: {
-              color: 'black'
-            }
-          },
-          y: {
-            ticks: {
-              color: 'black'
-            }
-          }
-        }
-      }
+        scales: {
+          xAxes: [
+          ],
+          yAxes: [
+
+          ],
+        },
+        animation: {
+          duration: 0,
+        },
+      },
     });
   }
 
@@ -551,169 +555,169 @@
   setInterval(obterDadosGraficoPie, 100000);
 
   //Graficos do habitat filtrado
-  let graficoBarLuminVariacao;
-    function obterDadosGraficoBarLuminHabi() {
-      var fk_empresa = sessionStorage.FK_EMPRESA;
+  // let graficoBarLuminVariacao;
+  //   function obterDadosGraficoBarLuminHabi() {
+  //     var fk_empresa = sessionStorage.FK_EMPRESA;
 
-      fetch(`/medidas/buscarResultadoGraficoBarLumin/${fk_empresa}`, {
-        method: "GET"
-      }).then(function (resposta) {
-        if (resposta.ok) {
-          return resposta.json();
-          graficoLuminVariacao.update();
-          ;
-        } else {
+  //     fetch(`/medidas/buscarResultadoGraficoBarLumin/${fk_empresa}`, {
+  //       method: "GET"
+  //     }).then(function (resposta) {
+  //       if (resposta.ok) {
+  //         return resposta.json();
+  //         graficoLuminVariacao.update();
+  //         ;
+  //       } else {
 
-          console.log("Houve um erro ao tentar realizar a busca!");
-        }
+  //         console.log("Houve um erro ao tentar realizar a busca!");
+  //       }
 
-      })
-        .then(function (data) {
-          if (data.length === 0) {
-            console.warn("Nenhum resultado encontrado");
-            return;
-          }
+  //     })
+  //       .then(function (data) {
+  //         if (data.length === 0) {
+  //           console.warn("Nenhum resultado encontrado");
+  //           return;
+  //         }
 
-          atualizarGraficoBarLuminHabi(data);
-        })
-        .catch(function (erro) {
-          console.log(erro);
-        })
+  //         atualizarGraficoBarLuminHabi(data);
+  //       })
+  //       .catch(function (erro) {
+  //         console.log(erro);
+  //       })
 
-      return false;
-    }
+  //     return false;
+  //   }
 
-    function atualizarGraficoBarLuminHabi(dados) {
-      console.log("Dados recebidos para o gráfico de Barra:", dados);
+    // function atualizarGraficoBarLuminHabi(dados) {
+    //   console.log("Dados recebidos para o gráfico de Barra:", dados);
 
-      const ctxHabi = document.getElementById(`luminosidadeHabi`);
+    //   const ctxHabi = document.getElementById(`luminosidadeHabi`);
 
-      if (graficoBarLuminVariacao) {
-        graficoBarLuminVariacao.destroy();
-      }
+    //   if (graficoBarLuminVariacao) {
+    //     graficoBarLuminVariacao.destroy();
+    //   }
 
-      const VetorHab = Object.values(dados[0]).map(Number);
-      const passos = ["13H"];
+    //   const VetorHab = Object.values(dados[0]).map(Number);
+    //   const passos = ["13H"];
 
-      graficoBarLuminVariacao = new Chart(ctxHabi, {
-        type: 'bar',
-        data: {
-          labels: ["13H"],
-          datasets: [{
-            label: 'luminocidade',
-            data: VetorHab,
+    //   graficoBarLuminVariacao = new Chart(ctxHabi, {
+    //     type: 'bar',
+    //     data: {
+    //       labels: ["13H"],
+    //       datasets: [{
+    //         label: 'luminocidade',
+    //         data: VetorHab,
 
-            backgroundColor:
-              '#fd2828'
-            ,
-            borderColor: '#fd2828',
-            tension: 0.1
-          }]
-        },
-        responsive: true,
-        options: {
-          responsive: true,
-          animation: false,
-          plugins: {
-            legend: {
-              labels: {
-                color: 'black'
-              }
-            },
-            y: {
-              ticks: {
-                color: 'black'
-              }
-            }
-          }
-        }
-      });
-    }
+    //         backgroundColor:
+    //           '#fd2828'
+    //         ,
+    //         borderColor: '#fd2828',
+    //         tension: 0.1
+    //       }]
+    //     },
+    //     responsive: true,
+    //     options: {
+    //       responsive: true,
+    //       animation: false,
+    //       plugins: {
+    //         legend: {
+    //           labels: {
+    //             color: 'black'
+    //           }
+    //         },
+    //         y: {
+    //           ticks: {
+    //             color: 'black'
+    //           }
+    //         }
+    //       }
+    //     }
+    //   });
+    // }
 
 
-    obterDadosGraficoBarLuminHabi();
-    setInterval(obterDadosGraficoBarLuminHabi, 5000);
+    // obterDadosGraficoBarLuminHabi();
+    // setInterval(obterDadosGraficoBarLuminHabi, 5000);
 
-    let graficoLineTempVariacao;
-    function obterDadosGraficoLineTempHabi() {
-      var fk_empresa = sessionStorage.FK_EMPRESA;
+    // let graficoLineTempVariacao;
+    // function obterDadosGraficoLineTempHabi() {
+    //   var fk_empresa = sessionStorage.FK_EMPRESA;
 
-      fetch(`/medidas/buscarResultadoGraficoBarLumin/${fk_empresa}`, {
-        method: "GET"
-      }).then(function (resposta) {
-        if (resposta.ok) {
-          return resposta.json();
-          graficoTempVariacao.update();
-          ;
-        } else {
+    //   fetch(`/medidas/buscarResultadoGraficoLineTemp/${fk_empresa}`, {
+    //     method: "GET"
+    //   }).then(function (resposta) {
+    //     if (resposta.ok) {
+    //       return resposta.json();
+    //       graficoTempVariacao.update();
+    //       ;
+    //     } else {
 
-          console.log("Houve um erro ao tentar realizar a busca!");
-        }
+    //       console.log("Houve um erro ao tentar realizar a busca!");
+    //     }
 
-      })
-        .then(function (data) {
-          if (data.length === 0) {
-            console.warn("Nenhum resultado encontrado");
-            return;
-          }
+    //   })
+    //     .then(function (data) {
+    //       // if (data.length === 0) {
+    //       //   console.warn("Nenhum resultado encontrado");
+    //       //   return;
+    //       // }
 
-          atualizarGraficoLineTempHabi(data);
-        })
-        .catch(function (erro) {
-          console.log(erro);
-        })
+    //       atualizarGraficoLineTempHabi(data);
+    //     })
+    //     .catch(function (erro) {
+    //       console.log(erro);
+    //     })
 
-      return false;
-    }
+    //   return false;
+    // }
 
-    function atualizarGraficoLineTempHabi(dados) {
-      console.log("Dados recebidos para o gráfico de LIne:", dados);
+    // function atualizarGraficoLineTempHabi(dados) {
+    //   console.log("Dados recebidos para o gráfico de LIne:", dados);
 
-      const ctxHabiTemp = document.getElementById(`lm35TemperaturaHabi`);
+    //   const ctxHabiTemp = document.getElementById(`lm35TemperaturaHabi`);
 
-      if (graficoLineTempVariacao) {
-        graficoLineTempVariacao.destroy();
-      }
+    //   if (graficoLineTempVariacao) {
+    //     graficoLineTempVariacao.destroy();
+    //   }
 
-      const VetorHab = Object.values(dados[0]).map(Number);
-      const passos = ["13H"];
+    //   const VetorHab = Object.values(dados[0]).map(Number);
+  
 
-      graficoLineTempVariacao = new Chart(ctxHabiTemp, {
-        type: 'line',
-        data: {
-          labels: ["13H"],
-          datasets: [{
-            label: 'luminocidade',
-            data: VetorHab,
+    //   graficoLineTempVariacao = new Chart(ctxHabiTemp, {
+    //     type: 'line',
+    //     data: {
+    //       labels: ['Ultimas 6 horas'] ,
+    //       datasets: [{
+    //         label: 'luminocidade',
+    //         data: VetorHab,
 
-            backgroundColor:
-              '#fd2828'
-            ,
-            borderColor: '#fd2828',
-            tension: 0.1
-          }]
-        },
-        responsive: true,
-        options: {
-          responsive: true,
-          animation: false,
-          plugins: {
-            legend: {
-              labels: {
-                color: 'black'
-              }
-            },
-            y: {
-              ticks: {
-                color: 'black'
-              }
-            }
-          }
-        }
-      });
-    }
-    obterDadosGraficoLineTempHabi();
-    setInterval(obterDadosGraficoLineTempHabi, 5000);
+    //         backgroundColor:
+    //           '#fd2828'
+    //         ,
+    //         borderColor: '#fd2828',
+    //         tension: 0.1
+    //       }]
+    //     },
+    //     responsive: true,
+    //     options: {
+    //       responsive: true,
+    //       animation: false,
+    //       plugins: {
+    //         legend: {
+    //           labels: {
+    //             color: 'black'
+    //           }
+    //         },
+    //         y: {
+    //           ticks: {
+    //             color: 'black'
+    //           }
+    //         }
+    //       }
+    //     }
+    //   });
+    // }
+    // obterDadosGraficoLineTempHabi();
+    // setInterval(obterDadosGraficoLineTempHabi, 5000);
 
 
 </script>

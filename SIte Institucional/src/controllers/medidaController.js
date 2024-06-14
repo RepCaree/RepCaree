@@ -94,7 +94,7 @@ function buscarResultadoGraficoPie(req, res) {
 
     console.log(`controller buscando os resultados do jogador`);
 
-    medidaModel.buscarResultadoGraficoBar(empresa).then(function (resultado) {
+    medidaModel.buscarResultadoGraficoPie(empresa).then(function (resultado) {
         if (resultado.length > 0) {
             res.status(200).json(resultado); /*resposta que o bd traz*/
         } else {
@@ -132,7 +132,7 @@ function buscarResultadoGraficoLineTemp(req, res) {
 
     console.log(`controller buscando os resultados do jogador`);
 
-    medidaModel.buscarResultadoGraficoBarLumin(empresa).then(function (resultado) {
+    medidaModel.buscarResultadoGraficoLineTemp(empresa).then(function (resultado) {
         if (resultado.length > 0) {
             res.status(200).json(resultado); /*resposta que o bd traz*/
         } else {
@@ -151,8 +151,8 @@ module.exports = {
     indicadores,
     buscarResultadoGraficoBar,
     buscarResultadoGraficoPie,
-    buscarResultadoGraficoBarLumin,
-    buscarResultadoGraficoLineTemp,
+    // buscarResultadoGraficoBarLumin,
+    // buscarResultadoGraficoLineTemp,
     alertas
 
 }

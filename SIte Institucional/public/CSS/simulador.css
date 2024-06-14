@@ -10,6 +10,7 @@
 /* Toda a página fica com margem = 0, e com a fonte estilo poppins */
 * {
     margin: 0;
+    text-decoration: none;
     font-family: 'poppins', sans-serif;
     font-family: 'Poppins';
 }
@@ -42,16 +43,23 @@ body {
 }
 
 /* Destalhes do titulo "CALCULE SEU PREJUÍZO" */
-.title {
+ .title {
     font-size: 50px;
     color: #01493A;
     text-align: center;
     font-weight: 900;
-    width: 100%;
+    width: 80%;
     justify-content: center;
     display: flex;
     align-items: center;
-}
+    justify-content: center;
+    position: relative;
+    top: 135px; 
+    left: 70px;
+} 
+
+
+
 
 /* Detalhes sobre o logo 7Sojas */
 .logo {
@@ -85,7 +93,6 @@ body {
     width: 300px;
     display: flex;
     flex-direction: column;
-    gap: 7px;
 }
 
 /* (container direito) Container onde aparece a foto(antes de clicar no botão) e a resposta(após clicar no botão)*/
@@ -128,7 +135,7 @@ body {
     justify-content: center;
 }
 
-.btn button{
+.btn button {
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     /* background-color: #77BD1F; */
     background-color: #B5E4AAA8;
@@ -224,8 +231,8 @@ body {
     bottom: 340px;
     right: 210px;
     filter: invert();
-    
-} 
+
+}
 
 .logoGrande {
     margin-top: 20px;
@@ -234,11 +241,12 @@ body {
 
 /* Estilos para o modal */
 .modal {
-    display: none; /* Esconde o modal por padrão */
+    display: none;
+    /* Esconde o modal por padrão */
     position: fixed;
     z-index: 1;
     left: 0;
-    top: 0;
+    top: 0;   
     width: 100%;
     height: 100%;
     overflow: auto;
@@ -255,6 +263,9 @@ body {
     padding: 20px;
     border: 1px solid #888;
     width: 30%;
+    position: relative;
+    bottom: 120px;
+    right: 400px;
 }
 
 /* Botão de fechar */
@@ -264,6 +275,7 @@ body {
     font-size: 28px;
     font-weight: bold;
     margin-bottom: 10px;
+    width: 10px;
 }
 
 .close:hover,
@@ -271,4 +283,5 @@ body {
     color: red;
     text-decoration: none;
     cursor: pointer;
+    
 }
