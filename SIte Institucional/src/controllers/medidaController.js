@@ -71,7 +71,7 @@ function buscarMedidasEmTempoReal(req, res) {
 
 function buscarResultadoGraficoBar(req, res) {
 
-    var empresa = req.params.fk_empresa;
+    var empresa = req.params.fk_habitat;
 
     console.log(`controller buscando os resultados do jogador`);
 
@@ -90,7 +90,7 @@ function buscarResultadoGraficoBar(req, res) {
 
 function buscarResultadoGraficoPie(req, res) {
 
-    var empresa = req.params.fk_empresa;
+    var empresa = req.params.fk_habitat;
 
     console.log(`controller buscando os resultados do jogador`);
 
@@ -151,8 +151,8 @@ module.exports = {
     indicadores,
     buscarResultadoGraficoBar,
     buscarResultadoGraficoPie,
-    // buscarResultadoGraficoBarLumin,
-    // buscarResultadoGraficoLineTemp,
+    buscarResultadoGraficoBarLumin,
+    buscarResultadoGraficoLineTemp,
     alertas
 
 }

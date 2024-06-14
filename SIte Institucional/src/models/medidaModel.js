@@ -124,19 +124,19 @@ function buscarMedidasEmTempoReal(idAquario) {
 
 function buscarResultadoGraficoBar() {
     var instrucaoSql = `
+       SELECT 
+        AVG(CASE WHEN LeituraTemp < 22 THEN LeituraTemp END) AS HabitatsAbaixo22,
+        AVG(CASE WHEN LeituraTemp >= 22 AND LeituraTemp <= 29 THEN LeituraTemp END) AS HabitatsEntre22e29,
+        AVG(CASE WHEN LeituraTemp > 29 THEN LeituraTemp END) AS HabitatsAcima29
+    FROM (
         SELECT 
-    SUM(CASE WHEN MediaLumi < 22 THEN 1 ELSE 0 END) AS HabitatsAbaixo400,
-    SUM(CASE WHEN MediaLumi >= 22 AND MediaLumi <= 29 THEN 1 ELSE 0 END) AS HabitatsEntre400e800,
-    SUM(CASE WHEN MediaLumi > 29 THEN 1 ELSE 0 END) AS HabitatsAcima800
-FROM (
-    SELECT 
-        fkHabitat,
-        AVG(LeituraTemp) AS MediaLumi
-    FROM Medidas
-    WHERE MONTH(DataLeitura) between 1 and 6
-      AND YEAR(DataLeitura) = YEAR(NOW())
-    GROUP BY fkHabitat
-) AS MediasHabitat;
+            MONTH(DataLeitura) AS Mes,
+            LeituraTemp
+        FROM Medidas
+        WHERE MONTH(DataLeitura) = MONTH(NOW())
+    ) AS TempMes
+    GROUP BY Mes
+    ORDER BY Mes;
                     `;
 
     console.log("Executando a instrução SQL: \n" + instrucaoSql);
@@ -164,42 +164,42 @@ FROM (
     return database.executar(instrucaoSql);
 }
 
-// function buscarResultadoGraficoBarLumin(empresa) {
-//     var instrucaoSql = `
+function buscarResultadoGraficoBarLumin(habitat) {
+    var instrucaoSql = `
    
-//     SELECT 
-//     truncate(AVG(CASE WHEN MediaLumi < 400 THEN MediaLumi END),0) AS MediaAbaixo22,
-//     truncate(AVG(CASE WHEN MediaLumi >= 400 AND MediaLumi <= 800 THEN MediaLumi END),0) AS MediaEntre22e29,
-//     truncate(AVG(CASE WHEN MediaLumi > 800 THEN MediaLumi END),0) AS MediaAcima29
-// FROM (
-//     SELECT 
-//         fkHabitat,
-//         AVG(LeituraLumi) AS MediaLumi
-//     FROM Medidas
-//     WHERE DataLeitura >= DATE_SUB(NOW(), INTERVAL 6 HOUR)
-//     GROUP BY fkHabitat
-// ) AS TempMes
-// WHERE fkHabitat = 1;
+    SELECT 
+    truncate(AVG(CASE WHEN MediaLumi < 400 THEN MediaLumi END),0) AS MediaAbaixo22,
+    truncate(AVG(CASE WHEN MediaLumi >= 400 AND MediaLumi <= 800 THEN MediaLumi END),0) AS MediaEntre22e29,
+    truncate(AVG(CASE WHEN MediaLumi > 800 THEN MediaLumi END),0) AS MediaAcima29
+FROM (
+    SELECT 
+        fkHabitat,
+        AVG(LeituraLumi) AS MediaLumi
+    FROM Medidas
+    WHERE DataLeitura >= DATE_SUB(NOW(), INTERVAL 6 HOUR)
+    GROUP BY fkHabitat
+) AS TempMes
+WHERE fkHabitat = '${habitat}'}
 
-//                     `;
+                    `;
 
-//     console.log("Executando a instrução SQL: \n" + instrucaoSql);
-//     return database.executar(instrucaoSql);
-// }
+    console.log("Executando a instrução SQL: \n" + instrucaoSql);
+    return database.executar(instrucaoSql);
+}
 
-// function buscarResultadoGraficoLineTemp(empresa) {
-//     var instrucaoSql = `
+function buscarResultadoGraficoLineTemp(empresa) {
+    var instrucaoSql = `
    
-//  SELECT 
-//     LeituraTemp AS MediaTemp
-// FROM Medidas
-// WHERE DataLeitura >= DATE_SUB(NOW(), INTERVAL 6 HOUR) as momento_grafico
-//   AND fkHabitat = 1;
-//                     `;
+ SELECT 
+    LeituraTemp AS MediaTemp
+FROM Medidas
+WHERE DataLeitura >= DATE_SUB(NOW(), INTERVAL 6 HOUR) as momento_grafico
+  AND fkHabitat = '${habitat}';
+                    `;
 
-//     console.log("Executando a instrução SQL: \n" + instrucaoSql);
-//     return database.executar(instrucaoSql);
-// }
+    console.log("Executando a instrução SQL: \n" + instrucaoSql);
+    return database.executar(instrucaoSql);
+}
 
 
 function alertas(empresa, habitat) {
@@ -226,7 +226,7 @@ module.exports = {
     indicadores,
     buscarResultadoGraficoBar,
     buscarResultadoGraficoPie,
-    // buscarResultadoGraficoBarLumin,
-    // buscarResultadoGraficoLineTemp,
+    buscarResultadoGraficoBarLumin,
+    buscarResultadoGraficoLineTemp,
     alertas
 }
