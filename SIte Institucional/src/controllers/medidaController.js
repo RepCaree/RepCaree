@@ -90,11 +90,11 @@ function buscarResultadoGraficoBar(req, res) {
 
 function buscarResultadoGraficoPie(req, res) {
 
-    var empresa = req.params.fk_habitat;
+    var idHabitat = req.params.idHabitat;
 
     console.log(`controller buscando os resultados do jogador`);
 
-    medidaModel.buscarResultadoGraficoPie(empresa).then(function (resultado) {
+    medidaModel.buscarResultadoGraficoPie(idHabitat).then(function (resultado) {
         if (resultado.length > 0) {
             res.status(200).json(resultado); /*resposta que o bd traz*/
         } else {
@@ -109,11 +109,11 @@ function buscarResultadoGraficoPie(req, res) {
 
 function buscarResultadoGraficoBarLumin(req, res) {
 
-    var empresa = req.params.fk_empresa;
+    var fk_habitat = req.params.fk_habitat;
 
     console.log(`controller buscando os resultados do jogador`);
 
-    medidaModel.buscarResultadoGraficoBarLumin(empresa).then(function (resultado) {
+    medidaModel.buscarResultadoGraficoBarLumin(fk_habitat).then(function (resultado) {
         if (resultado.length > 0) {
             res.status(200).json(resultado); /*resposta que o bd traz*/
         } else {
@@ -128,11 +128,11 @@ function buscarResultadoGraficoBarLumin(req, res) {
 
 function buscarResultadoGraficoLineTemp(req, res) {
 
-    var empresa = req.params.fk_empresa;
+    var fk_habitat = req.params.fk_habitat;
 
     console.log(`controller buscando os resultados do jogador`);
 
-    medidaModel.buscarResultadoGraficoLineTemp(empresa).then(function (resultado) {
+    medidaModel.buscarResultadoGraficoLineTemp(fk_habitat).then(function (resultado) {
         if (resultado.length > 0) {
             res.status(200).json(resultado); /*resposta que o bd traz*/
         } else {

@@ -101,7 +101,7 @@ function buscarUltimasMedidas(idAquario, limite_linhas) {
                         momento,
                         DATE_FORMAT(momento,'%H:%i:%s') as momento_grafico
                     FROM medida
-                    WHERE fk_aquario = ${idAquario}
+                    WHERE fk_aquario = 1
                     ORDER BY id DESC LIMIT ${limite_linhas}`;
 
     console.log("Executando a instrução SQL: \n" + instrucaoSql);
@@ -115,7 +115,7 @@ function buscarMedidasEmTempoReal(idAquario) {
         dht11_umidade as umidade,
                         DATE_FORMAT(momento,'%H:%i:%s') as momento_grafico, 
                         fk_aquario 
-                        FROM medida WHERE fk_aquario = ${idAquario} 
+                        FROM medida WHERE fk_aquario = 1
                     ORDER BY id DESC LIMIT 1`;
 
     console.log("Executando a instrução SQL: \n" + instrucaoSql);
@@ -167,19 +167,13 @@ FROM (
 function buscarResultadoGraficoBarLumin(habitat) {
     var instrucaoSql = `
    
-    SELECT 
-    truncate(AVG(CASE WHEN MediaLumi < 400 THEN MediaLumi END),0) AS MediaAbaixo22,
-    truncate(AVG(CASE WHEN MediaLumi >= 400 AND MediaLumi <= 800 THEN MediaLumi END),0) AS MediaEntre22e29,
-    truncate(AVG(CASE WHEN MediaLumi > 800 THEN MediaLumi END),0) AS MediaAcima29
-FROM (
-    SELECT 
-        fkHabitat,
-        AVG(LeituraLumi) AS MediaLumi
-    FROM Medidas
-    WHERE DataLeitura >= DATE_SUB(NOW(), INTERVAL 6 HOUR)
-    GROUP BY fkHabitat
-) AS TempMes
-WHERE fkHabitat = '${habitat}'}
+   SELECT 
+        LeituraTemp as luminosidade,
+                        DataLeitura,
+                        DATE_FORMAT(DataLeitura,'%H:%i:%s') as momento_grafico
+                    FROM Medidas
+                    WHERE fkHabitat = '${habitat}'
+                    ORDER BY idMedidas DESC LIMIT 7;
 
                     `;
 
@@ -187,14 +181,17 @@ WHERE fkHabitat = '${habitat}'}
     return database.executar(instrucaoSql);
 }
 
-function buscarResultadoGraficoLineTemp(empresa) {
+function buscarResultadoGraficoLineTemp(habitat) {
     var instrucaoSql = `
    
  SELECT 
-    LeituraTemp AS MediaTemp
-FROM Medidas
-WHERE DataLeitura >= DATE_SUB(NOW(), INTERVAL 6 HOUR) as momento_grafico
-  AND fkHabitat = '${habitat}';
+        LeituraLumi as temperatura,
+                        DataLeitura,
+                        DATE_FORMAT(DataLeitura,'%H:%i:%s') as momento_grafico
+                    FROM Medidas
+                    WHERE fkHabitat = '${habitat}'
+                    ORDER BY idMedidas DESC LIMIT 7;
+
                     `;
 
     console.log("Executando a instrução SQL: \n" + instrucaoSql);

@@ -92,11 +92,11 @@
     </div>
     <div id="temphabi" class="div_graficos" style="display: none;">
       <div class="div_grafico">
-        <span>Variação da Luminosidade a cada 6 horas</span>
+        <span>Ultimos 7 registros de temperatura</span>
         <canvas id="luminosidadeHabi"></canvas>
       </div>
       <div id="lumihabi" class="div_grafico" style="display: none;">
-        <span>Variação da Temperatura a cada 6 horas</span>
+        <span>Ultimos 7 registros de luminosidade </span>
         <canvas id="lm35TemperaturaHabi"></canvas>
       </div>
     </div>
@@ -183,6 +183,7 @@
   </div>
 </body>
 <script>
+  let idHabitat = sessionStorage.FK_HABITAT;
   NomeUsuario.innerHTML =  sessionStorage.NOME_USUARIO;
    obterDadosKPIs()
   validarAlertas()
@@ -207,7 +208,7 @@
           const a = document.createElement('a');
           li.className = 'li_habitat';
           a.textContent = 'Habitat ' + empresa.id;
-          a.href = '#' + empresa.id;
+          a.onclick = '#' + empresa.id;
           a.className = "alistaHabitats"
           a.id = 'nomeHabitat'   
           a.addEventListener('click', function (event) {
@@ -269,7 +270,7 @@
 
           // maior número inteiro
           mediaTemperatura = Math.ceil(mediaTemp);
-          mediaLuminocidade = Math.ceil(mediaLumin);
+          mediaLuminosidade = Math.ceil(mediaLumin);
           mediaAtualLumin1 = Math.ceil(mediaAtualLumin);
           mediaAtualTemp1 = Math.ceil(mediaAtualTemp);
           ultimoAlerta1 = ultimoAlerta;
@@ -288,10 +289,10 @@
         sessionStorage.ID_HABITAT_ALERTA = idHabitatAlerta1;
         sessionStorage.DADO_ULTIMO_ALERTA = ultimoAlerta1;
         sessionStorage.MEDIA_GERAL_TEMP = mediaTemperatura;
-        sessionStorage.MEDIA_GERAL_LUMIN = mediaLuminocidade;
+        sessionStorage.MEDIA_GERAL_LUMIN = mediaLuminosidade;
         
         document.getElementById('span_media_temp').innerHTML = `<span>${mediaTemperatura} °C</span>`;
-        document.getElementById('span_media_lumi').innerHTML = `<strong><span>${mediaLuminocidade} Lux</span></strong>`;
+        document.getElementById('span_media_lumi').innerHTML = `<strong><span>${mediaLuminosidade} Lux</span></strong>`;
         document.getElementById('medidasAtuaisTempLumin').innerHTML = `<strong><span>${mediaAtualTemp1}°C </span></strong>`;
         document.getElementById('medidasAtuaisTempLumin2').innerHTML = `<strong><span>${mediaAtualLumin1} Lux</span></strong>`;
         document.getElementById('textoKPI').innerHTML = `<span>${ultimoAlerta1}</span>`;
@@ -322,11 +323,17 @@
     });
   });
 
-
+  let habitat = sessionStorage.FK_HABITAT;
   function mudarDash() {
     atualizarKPIs();
-    tituloAlt.innerHTML = "Habitat 5"
-    tituloDash.style.display = 'none'
+    if(habitat == 1){
+      tituloAlt.innerHTML = "Habitat 1"
+      tituloDash.style.display = 'none'
+    } 
+     if (habitat != 1){
+      tituloAlt.innerHTML = "Habitat 2"
+      tituloDash.style.display = 'none'
+    }
     KPI1.style.display = 'none'
     KPI2.style.display = 'none'
     KPI3.style.display = 'none'
@@ -387,9 +394,9 @@
     const meses = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho'];
 
 
-    let HabitatsAbaixo22 = []
-    let HabitatsEntre22e29 = []
-    let HabitatsAcima29 = []
+    // let HabitatsAbaixo22 = []
+    // let HabitatsEntre22e29 = []
+    // let HabitatsAcima29 = []
     
     let dados = {
         labels: ['Ultimo mês'],
@@ -416,13 +423,14 @@
         ]
       }
 
-    for (i = 0; i < dadosBar.length; i++) {
+      for (i = 0; i < dadosBar.length; i++) {
             var registro = dadosBar[i];
             dados.datasets[0].data.push(registro.HabitatsAbaixo22);
             dados.datasets[1].data.push(registro.HabitatsEntre22e29);
             dados.datasets[2].data.push(registro.HabitatsAcima29);
         }
 
+  
     graficoBar = new Chart(ctx, {
       type: 'bar',
       data: dados,
@@ -468,7 +476,7 @@
 
   let graficoPie;
   function obterDadosGraficoPie() {
-    fetch(`/medidas/buscarResultadoGraficoPie/${sessionStorage.FK_EMPRESA}`, {
+    fetch(`/medidas/buscarResultadoGraficoPie/${sessionStorage.FK_HABITAT}`, {
       method: "GET"
     }).then(function (resposta) {
       if (resposta.ok) {
@@ -505,27 +513,10 @@
       graficoPie.destroy();
     }
 
-    
 
-    // Inicializamos os arrays para cada faixa de temperatura com zeros
-    // const abaixoDaMedia = [0, 0, 0, 0, 0, 0];
-    // const naMedia = [0, 0, 0, 0, 0, 0];
-    // const acimaDaMedia = [0, 0, 0, 0, 0, 0];
 
 
     const medias = Object.values(dadosPie[0]).map(Number); 
-
-    // if (dados[0]) {
-    //   if (dados[0].MediaAbaixo22 !== undefined) {
-    //     abaixoDaMedia[5] = dados[0].MediaAbaixo22;
-    //   }
-    //   if (dados[0].MediaEntre22e29 !== undefined) {
-    //     naMedia[5] = dados[0].MediaEntre22e29;
-    //   }
-    //   if (dados[0].MediaAcima29 !== undefined) {
-    //     acimaDaMedia[5] = dados[0].MediaAcima29;
-    //   }
-    // }
 
     graficoPie = new Chart(ctx, {
       type: "pie",
@@ -596,33 +587,58 @@
       return false;
     }
 
-    function atualizarGraficoBarLuminHabi(dados) {
-      console.log("Dados recebidos para o gráfico de Barra:", dados);
+    function atualizarGraficoBarLuminHabi(dadosHabi) {
+      console.log("Dados recebidos para o gráfico de Barra:", dadosHabi);
 
       const ctxHabi = document.getElementById(`luminosidadeHabi`);
-
       if (graficoBarLuminVariacao) {
         graficoBarLuminVariacao.destroy();
       }
 
-      const VetorHab = Object.values(dados[0]).map(Number);
-      const passos = ["13H"];
+      const labels = [];
+
+      let dados = {
+          labels: labels,
+          datasets: [{
+            label: 'temperatura',
+            data: [],
+
+            backgroundColor:
+              '#548D3D'
+            ,
+            borderColor: '#548D3D',
+            tension: 0.1
+          }]
+        }
+
+        for (i = 0; i < dadosHabi.length; i++) {
+            var registro = dadosHabi[i];
+            labels.push(registro.momento_grafico);
+            dados.datasets[0].data.push(registro.luminosidade);
+        }
+
+
 
       graficoBarLuminVariacao = new Chart(ctxHabi, {
         type: 'bar',
-        data: {
-          labels: ["13H"],
-          datasets: [{
-            label: 'luminocidade',
-            data: VetorHab,
-
-            backgroundColor:
-              '#fd2828'
-            ,
-            borderColor: '#fd2828',
-            tension: 0.1
-          }]
-        },
+        data: dados,
+        scales: {
+                        xAxes: [{
+                            distribution: 'series',
+                            ticks: {
+                                beginAtZero: true
+                            }
+                        }],
+                        yAxes: [{
+                            scaleLabel: {
+                                display: true,
+                                labelString: 'Temperatura'
+                            },
+                            ticks: {
+                                beginAtZero: true
+                            }
+                        }]
+                    },
         responsive: true,
         options: {
           responsive: true,
@@ -649,9 +665,9 @@
 
     let graficoLineTempVariacao;
     function obterDadosGraficoLineTempHabi() {
-      var fk_empresa = sessionStorage.FK_EMPRESA;
+      var fk_habitat = sessionStorage.FK_HABITAT;
 
-      fetch(`/medidas/buscarResultadoGraficoLineTemp/${fk_empresa}`, {
+      fetch(`/medidas/buscarResultadoGraficoLineTemp/${fk_habitat}`, {
         method: "GET"
       }).then(function (resposta) {
         if (resposta.ok) {
@@ -679,49 +695,48 @@
       return false;
     }
 
-    function atualizarGraficoLineTempHabi(dados) {
-      console.log("Dados recebidos para o gráfico de LIne:", dados);
+    function atualizarGraficoLineTempHabi(dadosTemp) {
+      console.log("Dados recebidos para o gráfico de LIne:", dadosTemp);
 
       const ctxHabiTemp = document.getElementById(`lm35TemperaturaHabi`);
 
       if (graficoLineTempVariacao) {
         graficoLineTempVariacao.destroy();
       }
-
-      const VetorHab = Object.values(dados[0]).map(Number);
   
+      const labels = [];
 
-      graficoLineTempVariacao = new Chart(ctxHabiTemp, {
-        type: 'line',
-        data: {
-          labels: ['Ultimas 6 horas'] ,
+       let dados = {
+          labels: labels ,
           datasets: [{
-            label: 'luminocidade',
-            data: VetorHab,
+            label: 'luminosidade',
+            data: [],
 
             backgroundColor:
-              '#fd2828'
+              '#548D3D'
             ,
-            borderColor: '#fd2828',
+            borderColor: '#548D3D',
             tension: 0.1
           }]
-        },
+        }
+
+
+        for (i = 0; i < dadosTemp.length; i++) {
+            var registro = dadosTemp[i];
+            labels.push(registro.momento_grafico);
+            dados.datasets[0].data.push(registro.temperatura);
+        }
+
+
+
+        graficoLineTempVariacao = new Chart(ctxHabiTemp, {
+        type: 'line',
+        data: dados,
         responsive: true,
         options: {
           responsive: true,
           animation: false,
-          plugins: {
-            legend: {
-              labels: {
-                color: 'black'
-              }
-            },
-            y: {
-              ticks: {
-                color: 'black'
-              }
-            }
-          }
+          fill: true,
         }
       });
     }
