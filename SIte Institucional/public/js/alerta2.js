@@ -81,7 +81,7 @@ function avaliarMetrica() {
     const abaixoLumin = 400;
     mudarCorKPI()
 
-     if((temp <= abaixoTemp || temp >= acimaTemp )&& (lumin > acimaLumin || lumin < abaixoLumin)){
+    if ((temp <= abaixoTemp || temp >= acimaTemp) && (lumin > acimaLumin || lumin < abaixoLumin)) {
         const habitatLista = document.getElementById('nomeHabitat')
         habitatLista.style.color = 'red'
         document.getElementById('habitatAlerta').innerHTML = `
@@ -92,7 +92,7 @@ function avaliarMetrica() {
         mostrarAlerta();
         mudarCorKPI()
     }
-   else  if (temp <= abaixoTemp || temp >= acimaTemp) {
+    else if (temp <= abaixoTemp || temp >= acimaTemp) {
         const habitatLista = document.getElementById('nomeHabitat')
         habitatLista.style.color = 'red'
         document.getElementById('habitatAlerta').innerHTML = `
@@ -146,12 +146,12 @@ function mudarCorKPI() {
     if (temp < 22 || temp > 29) {
         kpiTemp.style.color = 'red'
     } else {
-  kpiTemp.style.color = '#548D3D'
+        kpiTemp.style.color = '#548D3D'
     }
-     if (lumin < 400 || lumin > 800) {
+    if (lumin < 400 || lumin > 800) {
         kpiLumin.style.color = 'red'
     } else {
-      
+
         kpiLumin.style.color = '#548D3D'
     }
 }
