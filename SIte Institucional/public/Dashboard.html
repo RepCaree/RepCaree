@@ -24,7 +24,6 @@
   </style>
 </head>
 
-<!-- <body onload=" atualizarFeed()"> -->
 
 <body>
   <!--  inicio do menu da dashboard  -->
@@ -147,7 +146,7 @@
           <div class="div_KPI3content">
             <div class="divTextoKPI3">
               <img src="./IMG/Dashboard/temperatura-alta.png" alt="">
-              <span id="span_media_temp"></span>
+              <span id="span_media_temp" class="span_media_temp"></span>
             </div>
           </div>
         </div>
@@ -156,7 +155,7 @@
           <div class="div_KPI4content">
             <div class="divTextoKPI4">
               <img src="./IMG/Dashboard/temperaturas.png" alt="">
-              <span id="span_media_lumi"></span>
+              <span id="span_media_lumi" class="span_media_lumi"></span>
             </div>
           </div>
         </div>
@@ -207,6 +206,7 @@
           a.textContent = 'Habitat ' + empresa.id;
           a.href = '#' + empresa.id;
           a.className = "alistaHabitats"
+          a.id = 'nomeHabitat'   
           a.addEventListener('click', function (event) {
             event.preventDefault(); // Evita o comportamento padrão de seguir o link
             sessionStorage.FK_HABITAT = empresa.id
@@ -282,8 +282,9 @@
         sessionStorage.MEDIA_ATUALLUMIN = mediaAtualLumin1;
         sessionStorage.ID_HABITAT_ALERTA = idHabitatAlerta1;
         sessionStorage.DADO_ULTIMO_ALERTA = ultimoAlerta1;
+        sessionStorage.MEDIA_GERAL_TEMP = mediaTemperatura;
+        sessionStorage.MEDIA_GERAL_LUMIN = mediaLuminocidade;
 
-        var mediaTemp = sessionStorage.MEDIA_ATUAL;
         document.getElementById('span_media_temp').innerHTML = `<span>${mediaTemperatura} °C</span>`;
         document.getElementById('span_media_lumi').innerHTML = `<strong><span>${mediaLuminocidade} Lux</span></strong>`;
         document.getElementById('medidasAtuaisTempLumin').innerHTML = `<strong><span>${mediaAtualTemp1}°C </span></strong>`;
@@ -293,6 +294,8 @@
         document.getElementById('spanPorcentagemKPI1').innerHTML = `<strong><span>${porcetagemAlertas1}%</span></strong>`;
         document.getElementById('spanPorcentagemKPI2').innerHTML = `<strong><span>Habitat ${idHabitatAlerta1}</span></strong>`;
         document.getElementById('span2UltimosAlertas').innerHTML = `<strong><span>Habitat ${idHabitatAlerta2Ultmos1}</span></strong>`;
+
+       
       })
       .catch(function (erro) {
         console.error(`#ERRO: ${erro.message}`);
