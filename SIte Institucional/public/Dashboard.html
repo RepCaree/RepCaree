@@ -326,14 +326,8 @@
   let habitat = sessionStorage.FK_HABITAT;
   function mudarDash() {
     atualizarKPIs();
-    if(habitat == 1){
-      tituloAlt.innerHTML = "Habitat 1"
-      tituloDash.style.display = 'none'
-    } 
-     if (habitat != 1){
-      tituloAlt.innerHTML = "Habitat 2"
-      tituloDash.style.display = 'none'
-    }
+    tituloAlt.innerHTML = `Habitat ${sessionStorage.FK_HABITAT}`
+    tituloDash.style.display = 'none'
     KPI1.style.display = 'none'
     KPI2.style.display = 'none'
     KPI3.style.display = 'none'
@@ -732,6 +726,23 @@
         graficoLineTempVariacao = new Chart(ctxHabiTemp, {
         type: 'line',
         data: dados,
+        scales: {
+                        xAxes: [{
+                            distribution: 'series',
+                            ticks: {
+                                beginAtZero: true
+                            }
+                        }],
+                        yAxes: [{
+                            scaleLabel: {
+                                display: true,
+                                labelString: 'Temperatura'
+                            },
+                            ticks: {
+                                beginAtZero: true
+                            }
+                        }]
+                    },
         responsive: true,
         options: {
           responsive: true,
